@@ -365,6 +365,7 @@ export default function ConstitucionPage() {
 
   const topicSuggestions = [
     { label: t.topicDueProcess || '⚖️ Debido proceso', query: 'debido proceso' },
+    { label: (t as any).topicConsumer || '🛒 Protección al consumidor', query: 'protección al consumidor' },
     { label: t.topicLabor || '💼 Derecho al trabajo', query: 'trabajo' },
     { label: t.topicHealth || '🏥 Salud y seguridad', query: 'salud' },
     { label: t.topicEquality || '🤝 Igualdad y no discriminación', query: 'igualdad' },

@@ -60,6 +60,16 @@ export class ConstituteService {
     this.baseUrl = process.env.CONSTITUTE_API_BASE_URL || 'https://www.constituteproject.org/service';
   }
 
+  /**
+   * Cache write with TTL. The timer is unref'd so it never keeps a
+   * Node process (scripts, tests, workers) alive on its own.
+   */
+  private cacheSet(key: string, value: any, ttlMs: number): void {
+    this.cache.set(key, value);
+    const timer = setTimeout(() => this.cache.delete(key), ttlMs);
+    if (typeof (timer as any)?.unref === 'function') (timer as any).unref();
+  }
+
   private resolveCountry(countryOrCode: string): string {
     const codeUpper = (countryOrCode || 'EC').toUpperCase();
     return this.countryMapping[codeUpper] || countryOrCode;
@@ -100,8 +110,7 @@ export class ConstituteService {
       }
 
       const data = await response.json();
-      this.cache.set(cacheKey, data);
-      setTimeout(() => this.cache.delete(cacheKey), 3600000); // 1 hr cache
+      this.cacheSet(cacheKey, data, 3600000); // 1 hr cache
 
       return data;
     } catch (error) {
@@ -144,8 +153,7 @@ export class ConstituteService {
       }
 
       const data = await response.json();
-      this.cache.set(cacheKey, data);
-      setTimeout(() => this.cache.delete(cacheKey), 1800000); // 30 min cache
+      this.cacheSet(cacheKey, data, 1800000); // 30 min cache
 
       return data;
     } catch (error) {
@@ -192,14 +200,34 @@ export class ConstituteService {
 
       const data = await response.json();
       const html = data?.html || '';
-      this.cache.set(cacheKey, html);
-      setTimeout(() => this.cache.delete(cacheKey), 86400000); // 24 hr cache
+      this.cacheSet(cacheKey, html, 86400000); // 24 hr cache
 
       return html;
     } catch (error) {
       console.warn('[ConstituteService] Error fetching constitution HTML:', error);
       return '';
     }
+  }
+
+  /**
+   * Structural headings (SECCIÓN/CAPÍTULO/TÍTULO/DISPOSICIÓN, h1-h6) never
+   * belong to an article's body: in Constitute HTML they sit between the
+   * previous article and the next one, so without stripping they pollute
+   * the previous article (ej. "SECCIÓN 9. Personas usuarias y consumidoras"
+   * terminaba dentro del Art. 51 y lo hacía rankear como "consumidor").
+   */
+  private structuralHeaderRes: RegExp[] = [
+    /<h[1-6][^>]*>[\s\S]*?<\/h[1-6]>/gi,
+    /<p[^>]*>\s*(SECCI[ÓO]N|CAP[ÍI]TULO|T[ÍI]TULO|DISPOSICI[ÓO]N|Secci[óo]n|Cap[íi]tulo|T[íi]tulo|Disposici[óo]n)\b[^<]*<\/p>/gi,
+  ];
+
+  private stripStructuralHeaders(htmlSlice: string): string {
+    let out = htmlSlice;
+    for (const re of this.structuralHeaderRes) {
+      re.lastIndex = 0;
+      out = out.replace(re, ' ');
+    }
+    return out;
   }
 
   /**
@@ -244,7 +272,7 @@ export class ConstituteService {
         const title = matches[i][1].trim();
         const startIdx = matches[i].index || 0;
         const endIdx = (i + 1 < matches.length) ? (matches[i + 1].index || fullHtml.length) : fullHtml.length;
-        const content = this.stripHtml(fullHtml.substring(startIdx, endIdx));
+        const content = this.stripHtml(this.stripStructuralHeaders(fullHtml.substring(startIdx, endIdx)));
         articles.push({
           id: `art_${i + 1}`,
           title,
@@ -258,8 +286,7 @@ export class ConstituteService {
         articles
       };
 
-      this.cache.set(cacheKey, result);
-      setTimeout(() => this.cache.delete(cacheKey), 86400000); // 24 hr cache
+      this.cacheSet(cacheKey, result, 86400000); // 24 hr cache
       return result;
     } catch (error) {
       console.warn('[ConstituteService] Error extracting all articles:', error);
@@ -268,7 +295,11 @@ export class ConstituteService {
   }
 
   /**
-   * Retrieve structured articles matching a user's legal crisis query
+   * Retrieve structured articles matching a user's legal crisis query.
+   * Estrategia: búsqueda local con scoring sobre el corpus completo ya
+   * parseado (getAllArticles) + fallback remoto a /textsearch.
+   * Corrige el bug "protección al consumidor": antes hacía return al
+   * primer token ("proteccion", 45 hits) sin intersección con "consumidor".
    */
   async getRelevantArticles(params: {
     query: string;
@@ -295,7 +326,28 @@ export class ConstituteService {
       const activeCons = constitutions.find(c => c.in_force) || constitutions[0];
       const consId = activeCons.id;
 
-      // 2. Perform direct text search against this specific constitution
+      const rawTokens = this.tokenizeQuery(query);
+      const normQuery = this.normalizeText(query).replace(/\s+/g, ' ').trim();
+      const queryNumbers = Array.from(normQuery.matchAll(/\b\d{1,3}\b/g)).map(m => m[0]);
+
+      // 2. PRIMARY: local search with scoring over the full parsed corpus
+      if (rawTokens.length > 0) {
+        const fullInfo = await this.getAllArticles({ country: countryName, language });
+        if (fullInfo.articles.length > 0) {
+          const scored = this.scoreArticlesLocal(
+            fullInfo.articles.map(a => ({ title: a.title, content: a.content })),
+            rawTokens,
+            normQuery,
+            queryNumbers,
+            limit
+          );
+          if (scored.length > 0) {
+            return scored;
+          }
+        }
+      }
+
+      // 3. Fallback remoto: frase exacta vía /textsearch
       const sectionResults = await this.textSearch({
         query,
         cons_id: consId,
@@ -314,96 +366,42 @@ export class ConstituteService {
         }
       }
 
-      // 3. Synonym & Semantic expansion map for common search terms
-      const termExpansions: Record<string, string[]> = {
-        juventud: ['jóvenes', 'joven', 'educación', 'participación'],
-        jovenes: ['jóvenes', 'joven', 'educación', 'derechos'],
-        joven: ['jóvenes', 'juventud', 'educación'],
-        adolescente: ['niñez', 'jóvenes', 'protección'],
-        ninez: ['niños', 'niñas', 'familia', 'educación'],
-        trabajo: ['empleo', 'laboral', 'remuneración', 'trabajadores'],
-        salud: ['atención médica', 'seguridad social', 'vida'],
-        vivienda: ['hábitat', 'hogar', 'propiedad'],
-        debido: ['garantías judiciales', 'defensa', 'juez'],
-        proceso: ['debido proceso', 'garantías', 'justicia'],
-        igualdad: ['no discriminación', 'derechos', 'equidad'],
-        libertad: ['expresión', 'movilidad', 'asociación'],
-        alimentos: ['familia', 'pensión', 'hijos', 'niñez']
-      };
-
-      // 4. Tokenize query into meaningful search keywords
-      const rawTokens = query
-        .toLowerCase()
-        .replace(/[^\wáéíóúüñ\s]/gi, ' ')
-        .split(/\s+/)
-        .filter(t => t.length >= 3 && !['para', 'como', 'sobre', 'este', 'esta', 'todo', 'toda', 'unos', 'unas', 'pero', 'ante', 'bajo', 'desde'].includes(t));
-
-      // Try searching with individual keywords via textSearch
-      for (const token of rawTokens) {
-        const tokenRes = await this.textSearch({ query: token, cons_id: consId, language });
-        if (tokenRes && tokenRes[consId] && tokenRes[consId].results && tokenRes[consId].results.length > 0) {
-          const cleaned = tokenRes[consId].results
-            .slice(0, limit)
-            .map((html: string) => this.stripHtml(html))
-            .filter((text: string) => text.length > 20);
-          if (cleaned.length > 0) {
-            return cleaned;
-          }
-        }
-
-        // Try expanded synonyms
-        const expansions = termExpansions[token] || [];
-        for (const exp of expansions) {
-          const expRes = await this.textSearch({ query: exp, cons_id: consId, language });
-          if (expRes && expRes[consId] && expRes[consId].results && expRes[consId].results.length > 0) {
-            const cleaned = expRes[consId].results
+      // 4. Fallback remoto por token (solo si lo local no indexó nada).
+      // Sin early-return ciego: se recolecta el mejor token por nº de hits.
+      if (rawTokens.length > 0) {
+        let best: string[] = [];
+        for (const token of rawTokens) {
+          const tokenRes = await this.textSearch({ query: token, cons_id: consId, language });
+          const hits = tokenRes?.[consId]?.results?.length || 0;
+          if (hits > 0) {
+            const cleaned = (tokenRes[consId].results as string[])
               .slice(0, limit)
               .map((html: string) => this.stripHtml(html))
               .filter((text: string) => text.length > 20);
-            if (cleaned.length > 0) {
-              return cleaned;
+            if (cleaned.length > 0 && (best.length === 0 || hits > best.length)) {
+              best = cleaned;
+            }
+          }
+          const expansions = this.getTermExpansions()[token] || [];
+          for (const exp of expansions) {
+            const expRes = await this.textSearch({ query: exp, cons_id: consId, language });
+            if (expRes?.[consId]?.results?.length > 0) {
+              const cleaned = (expRes[consId].results as string[])
+                .slice(0, limit)
+                .map((html: string) => this.stripHtml(html))
+                .filter((text: string) => text.length > 20);
+              if (cleaned.length > 0 && best.length === 0) {
+                best = cleaned;
+              }
             }
           }
         }
-      }
-
-      // 5. Deep Fallback: Parse full constitution HTML and match by word root / regex
-      const fullHtml = await this.getConstitutionHtml(consId, language);
-      if (fullHtml && fullHtml.length > 500) {
-        const articleRegex = /<p[^>]*>\s*(Art[ií]culo\s*\d+[^\<]*)\s*<\/p>/gi;
-        const matches = Array.from(fullHtml.matchAll(articleRegex)) as RegExpExecArray[];
-        const allArticles: { title: string; content: string }[] = [];
-
-        for (let i = 0; i < matches.length; i++) {
-          const title = matches[i][1].trim();
-          const startIdx = matches[i].index || 0;
-          const endIdx = (i + 1 < matches.length) ? (matches[i + 1].index || fullHtml.length) : fullHtml.length;
-          const content = this.stripHtml(fullHtml.substring(startIdx, endIdx));
-          allArticles.push({ title, content });
-        }
-
-        // Create search terms pattern from tokens & expansions
-        const searchTerms = [...rawTokens];
-        rawTokens.forEach(t => {
-          if (termExpansions[t]) searchTerms.push(...termExpansions[t]);
-        });
-
-        if (searchTerms.length > 0) {
-          const regexStr = searchTerms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
-          const matcher = new RegExp(`\\b(?:${regexStr})`, 'i');
-
-          const matchedArticles = allArticles
-            .filter(a => matcher.test(a.content))
-            .slice(0, limit)
-            .map(a => a.content);
-
-          if (matchedArticles.length > 0) {
-            return matchedArticles;
-          }
+        if (best.length > 0) {
+          return best;
         }
       }
 
-      // 6. Last Fallback: Topic search
+      // 5. Last Fallback: Topic search
       const topics = ['debido proceso', 'derechos fundamentales', 'trabajo', 'familia', 'igualdad'];
       for (const t of topics) {
         if (query.toLowerCase().includes(t)) {
@@ -419,6 +417,231 @@ export class ConstituteService {
       console.warn('[ConstituteService] Error getting relevant articles:', error);
       return [];
     }
+  }
+
+  /**
+   * Bloques jurídicos conocidos: si la consulta apunta al tema del bloque,
+   * sus artículos reciben un bonus para que el bloque llegue completo aunque
+   * algún artículo use una redacción distinta (ej. Art. 54: "bienes de
+   * consumo" en vez de "consumidor"). Verificado contra Ecuador_2021.
+   * Para añadir un bloque nuevo, agregar una entrada aquí (no regex sueltas).
+   */
+  private clusterBoosts: { tokens: string[]; titleRe: RegExp; bonus: number; comment: string }[] = [
+    { tokens: ['consumidor', 'consumidoras', 'consumidores', 'consumo', 'usuarias', 'usuarios'], titleRe: /^articulo\s*5[2-5]\b/, bonus: 30, comment: 'Sección 9: Personas usuarias y consumidoras' },
+    { tokens: ['debido', 'proceso'], titleRe: /^articulo\s*7[67]\b/, bonus: 30, comment: 'Garantías básicas del debido proceso' },
+  ];
+
+  private matchesCluster(rawTokens: string[], normQuery: string, tokens: string[]): boolean {
+    if (rawTokens.some(t => tokens.includes(t))) return true;
+    // Fallback sobre la frase completa con frontera de palabra: evita que
+    // 'procesos electorales' dispare el bloque de debido proceso.
+    return tokens.some(t => t.length >= 4 && new RegExp(`\\b${t}\\b`).test(normQuery));
+  }
+
+  private getTermExpansions(): Record<string, string[]> {
+    return {
+      juventud: ['jóvenes', 'joven', 'educación', 'participación'],
+      jovenes: ['jóvenes', 'joven', 'educación', 'derechos'],
+      joven: ['jóvenes', 'juventud', 'educación'],
+      adolescente: ['niñez', 'jóvenes', 'protección'],
+      ninez: ['niños', 'niñas', 'familia', 'educación'],
+      trabajo: ['empleo', 'laboral', 'remuneración', 'trabajadores'],
+      salud: ['atención médica', 'seguridad social', 'vida'],
+      vivienda: ['hábitat', 'hogar', 'propiedad'],
+      debido: ['garantías judiciales', 'defensa', 'juez'],
+      proceso: ['debido proceso', 'garantías', 'justicia'],
+      igualdad: ['no discriminación', 'derechos', 'equidad'],
+      libertad: ['expresión', 'movilidad', 'asociación'],
+      alimentos: ['familia', 'pensión', 'hijos', 'niñez'],
+      // Protección al consumidor (Ecuador, Sección 9, Arts. 52-55).
+      // Nota: sinónimos genéricos ('defensa', 'calidad' suelta) NO van aquí
+      // porque aparecen en decenas de artículos y hunden el ranking.
+      proteccion: ['garantía', 'tutela', 'control de calidad'],
+      consumidor: ['consumidoras', 'consumidores', 'usuarias', 'usuarios', 'bienes de consumo', 'bienes y servicios', 'control de calidad', 'óptima calidad'],
+      consumidoras: ['consumidores', 'usuarias', 'bienes y servicios', 'control de calidad'],
+      usuarias: ['usuarios', 'consumidoras', 'consumidores', 'servicios públicos'],
+      consumo: ['bienes de consumo', 'consumidoras', 'consumidores'],
+      calidad: ['óptima calidad', 'control de calidad', 'bienes y servicios'],
+    };
+  }
+
+  private normalizeText(s: string): string {
+    if (!s) return '';
+    // Preservar ñ antes de strip diacríticos (NFD convierte ñ en n + virgulilla)
+    return s
+      .toLowerCase()
+      .replace(/ñ/g, '\u0001')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\u0001/g, 'ñ');
+  }
+
+  private tokenizeQuery(query: string): string[] {
+    const stop = new Set([
+      'para', 'como', 'sobre', 'este', 'esta', 'todo', 'toda', 'todos', 'todas',
+      'unos', 'unas', 'pero', 'ante', 'bajo', 'desde', 'entre', 'hasta',
+      'los', 'las', 'que', 'con', 'por', 'una', 'uno', 'sus', 'son', 'sea',
+      'ser', 'hay', 'muy', 'sin', 'mas', 'asi', 'tan', 'fue', 'esta', 'esto',
+    ]);
+    return this.normalizeText(query)
+      .replace(/[^a-z0-9ñ\s]/g, ' ')
+      .split(/\s+/)
+      .filter(t => t.length >= 3 && !stop.has(t));
+  }
+
+  private scoreArticlesLocal(
+    articles: { title: string; content: string }[],
+    rawTokens: string[],
+    normQuery: string,
+    queryNumbers: string[],
+    limit: number
+  ): string[] {
+    const expansions = this.getTermExpansions();
+    const total = Math.max(articles.length, 1);
+
+    // Pre-normalizar corpus una vez + DF para ponderación IDF:
+    // términos raros ('consumidor') pesan más que comunes ('proteccion').
+    const normed = articles.map(a => ({
+      title: a.title,
+      content: a.content,
+      normTitle: this.normalizeText(a.title),
+      normContent: this.normalizeText(a.content),
+    }));
+    const df = new Map<string, number>();
+    const countTerm = (term: string) => {
+      if (term.length < 3 || df.has(term)) return;
+      let n = 0;
+      for (const a of normed) {
+        if (a.normTitle.includes(term) || a.normContent.includes(term)) n++;
+      }
+      df.set(term, n);
+    };
+    for (const t of rawTokens) {
+      countTerm(t);
+      for (const syn of expansions[t] || []) countTerm(this.normalizeText(syn));
+    }
+    const idf = (term: string): number => {
+      const n = df.get(term) ?? total;
+      return 1 + Math.log(total / Math.max(n, 1));
+    };
+
+    const scored: { content: string; score: number; hits: number }[] = [];
+
+    for (const a of normed) {
+      const { normContent, normTitle } = a;
+      let score = 0;
+      let hits = 0;
+
+      // Bonus frase exacta
+      if (normQuery.length >= 4 && normContent.includes(normQuery)) {
+        score += 8;
+      }
+
+      // Bonus número de artículo explícito ("artículo 52")
+      for (const n of queryNumbers) {
+        if (new RegExp(`articulo\\s*${n}\\b`).test(normTitle) || new RegExp(`articulo\\s*${n}\\b`).test(normContent.slice(0, 120))) {
+          score += 20;
+          hits += 2;
+        }
+      }
+
+      let directHits = 0;
+      let synHits = 0;
+
+      for (const token of rawTokens) {
+        const w = idf(token);
+        let directHit = false;
+        if (normTitle.includes(token)) {
+          score += 10 * w;
+          directHit = true;
+        } else if (normContent.includes(token)) {
+          score += 5 * w;
+          directHit = true;
+        } else if (token.length >= 6) {
+          // Raíz léxica con frontera de palabra: 'consum' cubre
+          // consumo/consumidor/consumidoras; 'protec' cubre
+          // protección/protecciones. Pesa menos que el término exacto
+          // pero cuenta como coincidencia directa (mismo lexema).
+          const stemRe = new RegExp(`\\b${token.slice(0, 6)}`);
+          if (stemRe.test(normTitle)) {
+            score += 6 * w;
+            directHit = true;
+          } else if (stemRe.test(normContent)) {
+            score += 3 * w;
+            directHit = true;
+          }
+        }
+        if (!directHit) {
+          // Raíz singular/plural (consumidores -> consumidor)
+          const root = token.length > 4 ? token.replace(/(es|s)$/, '') : token;
+          if (root.length >= 4 && (normContent.includes(root) || normTitle.includes(root))) {
+            score += 3 * idf(root);
+            directHit = true;
+          }
+        }
+
+        // Sinónimos del token: pesan menos y NO cuentan como hit directo.
+        // (Antes dos sinónimos genéricos simulaban intersección temática
+        // y colaban artículos irrelevantes por encima del bloque correcto.)
+        let synHit = false;
+        {
+          const syns = expansions[token] || [];
+          for (const syn of syns) {
+            const normSyn = this.normalizeText(syn);
+            if (normSyn.length < 3) continue;
+            const ws = idf(normSyn);
+            if (normTitle.includes(normSyn)) {
+              score += (directHit ? 1 : 4) * ws;
+              synHit = true;
+              break;
+            }
+            if (normContent.includes(normSyn)) {
+              score += (directHit ? 1 : 3) * ws;
+              synHit = true;
+              break;
+            }
+          }
+        }
+
+        if (directHit) {
+          directHits += 1;
+          hits += 1;
+        } else if (synHit) {
+          synHits += 1;
+          hits += 1;
+        }
+      }
+
+      // Bonus cluster jurídico conocido (ver clusterBoosts): garantiza que
+      // una consulta temática traiga el bloque completo aunque un artículo
+      // use una redacción distinta (ej. Art. 54: "bienes de consumo";
+      // Art. 77: garantías en proceso penal sin decir "debido").
+      let clusterHit = false;
+      for (const cb of this.clusterBoosts) {
+        if (this.matchesCluster(rawTokens, normQuery, cb.tokens) && cb.titleRe.test(normTitle)) {
+          score += cb.bonus;
+          clusterHit = true;
+          break;
+        }
+      }
+
+      // Intersección: premia artículos que cubren varios tokens con el
+      // término exacto (o su raíz). Pertenecer al bloque temático cuenta
+      // como una coincidencia más; los sinónimos solos dan un bonus menor.
+      const effDirect = directHits + (clusterHit ? 1 : 0);
+      if (effDirect >= 2) {
+        score += effDirect * 8;
+      } else if (directHits >= 1 && synHits >= 1) {
+        score += 4;
+      }
+
+      if (score > 0) {
+        scored.push({ content: a.content, score, hits });
+      }
+    }
+
+    scored.sort((x, y) => y.score - x.score || y.hits - x.hits);
+    return scored.slice(0, limit).map(s => s.content);
   }
 
   private stripHtml(html: string): string {
