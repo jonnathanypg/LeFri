@@ -268,7 +268,11 @@ export class ConstituteService {
   }
 
   /**
-   * Retrieve structured articles matching a user's legal crisis query
+   * Retrieve structured articles matching a user's legal crisis query.
+   * Estrategia: búsqueda local con scoring sobre el corpus completo ya
+   * parseado (getAllArticles) + fallback remoto a /textsearch.
+   * Corrige el bug "protección al consumidor": antes hacía return al
+   * primer token ("proteccion", 45 hits) sin intersección con "consumidor".
    */
   async getRelevantArticles(params: {
     query: string;
@@ -295,7 +299,28 @@ export class ConstituteService {
       const activeCons = constitutions.find(c => c.in_force) || constitutions[0];
       const consId = activeCons.id;
 
-      // 2. Perform direct text search against this specific constitution
+      const rawTokens = this.tokenizeQuery(query);
+      const normQuery = this.normalizeText(query).replace(/\s+/g, ' ').trim();
+      const queryNumbers = Array.from(normQuery.matchAll(/\b\d{1,3}\b/g)).map(m => m[0]);
+
+      // 2. PRIMARY: local search with scoring over the full parsed corpus
+      if (rawTokens.length > 0) {
+        const fullInfo = await this.getAllArticles({ country: countryName, language });
+        if (fullInfo.articles.length > 0) {
+          const scored = this.scoreArticlesLocal(
+            fullInfo.articles.map(a => ({ title: a.title, content: a.content })),
+            rawTokens,
+            normQuery,
+            queryNumbers,
+            limit
+          );
+          if (scored.length > 0) {
+            return scored;
+          }
+        }
+      }
+
+      // 3. Fallback remoto: frase exacta vía /textsearch
       const sectionResults = await this.textSearch({
         query,
         cons_id: consId,
@@ -314,96 +339,42 @@ export class ConstituteService {
         }
       }
 
-      // 3. Synonym & Semantic expansion map for common search terms
-      const termExpansions: Record<string, string[]> = {
-        juventud: ['jóvenes', 'joven', 'educación', 'participación'],
-        jovenes: ['jóvenes', 'joven', 'educación', 'derechos'],
-        joven: ['jóvenes', 'juventud', 'educación'],
-        adolescente: ['niñez', 'jóvenes', 'protección'],
-        ninez: ['niños', 'niñas', 'familia', 'educación'],
-        trabajo: ['empleo', 'laboral', 'remuneración', 'trabajadores'],
-        salud: ['atención médica', 'seguridad social', 'vida'],
-        vivienda: ['hábitat', 'hogar', 'propiedad'],
-        debido: ['garantías judiciales', 'defensa', 'juez'],
-        proceso: ['debido proceso', 'garantías', 'justicia'],
-        igualdad: ['no discriminación', 'derechos', 'equidad'],
-        libertad: ['expresión', 'movilidad', 'asociación'],
-        alimentos: ['familia', 'pensión', 'hijos', 'niñez']
-      };
-
-      // 4. Tokenize query into meaningful search keywords
-      const rawTokens = query
-        .toLowerCase()
-        .replace(/[^\wáéíóúüñ\s]/gi, ' ')
-        .split(/\s+/)
-        .filter(t => t.length >= 3 && !['para', 'como', 'sobre', 'este', 'esta', 'todo', 'toda', 'unos', 'unas', 'pero', 'ante', 'bajo', 'desde'].includes(t));
-
-      // Try searching with individual keywords via textSearch
-      for (const token of rawTokens) {
-        const tokenRes = await this.textSearch({ query: token, cons_id: consId, language });
-        if (tokenRes && tokenRes[consId] && tokenRes[consId].results && tokenRes[consId].results.length > 0) {
-          const cleaned = tokenRes[consId].results
-            .slice(0, limit)
-            .map((html: string) => this.stripHtml(html))
-            .filter((text: string) => text.length > 20);
-          if (cleaned.length > 0) {
-            return cleaned;
-          }
-        }
-
-        // Try expanded synonyms
-        const expansions = termExpansions[token] || [];
-        for (const exp of expansions) {
-          const expRes = await this.textSearch({ query: exp, cons_id: consId, language });
-          if (expRes && expRes[consId] && expRes[consId].results && expRes[consId].results.length > 0) {
-            const cleaned = expRes[consId].results
+      // 4. Fallback remoto por token (solo si lo local no indexó nada).
+      // Sin early-return ciego: se recolecta el mejor token por nº de hits.
+      if (rawTokens.length > 0) {
+        let best: string[] = [];
+        for (const token of rawTokens) {
+          const tokenRes = await this.textSearch({ query: token, cons_id: consId, language });
+          const hits = tokenRes?.[consId]?.results?.length || 0;
+          if (hits > 0) {
+            const cleaned = (tokenRes[consId].results as string[])
               .slice(0, limit)
               .map((html: string) => this.stripHtml(html))
               .filter((text: string) => text.length > 20);
-            if (cleaned.length > 0) {
-              return cleaned;
+            if (cleaned.length > 0 && (best.length === 0 || hits > best.length)) {
+              best = cleaned;
+            }
+          }
+          const expansions = this.getTermExpansions()[token] || [];
+          for (const exp of expansions) {
+            const expRes = await this.textSearch({ query: exp, cons_id: consId, language });
+            if (expRes?.[consId]?.results?.length > 0) {
+              const cleaned = (expRes[consId].results as string[])
+                .slice(0, limit)
+                .map((html: string) => this.stripHtml(html))
+                .filter((text: string) => text.length > 20);
+              if (cleaned.length > 0 && best.length === 0) {
+                best = cleaned;
+              }
             }
           }
         }
-      }
-
-      // 5. Deep Fallback: Parse full constitution HTML and match by word root / regex
-      const fullHtml = await this.getConstitutionHtml(consId, language);
-      if (fullHtml && fullHtml.length > 500) {
-        const articleRegex = /<p[^>]*>\s*(Art[ií]culo\s*\d+[^\<]*)\s*<\/p>/gi;
-        const matches = Array.from(fullHtml.matchAll(articleRegex)) as RegExpExecArray[];
-        const allArticles: { title: string; content: string }[] = [];
-
-        for (let i = 0; i < matches.length; i++) {
-          const title = matches[i][1].trim();
-          const startIdx = matches[i].index || 0;
-          const endIdx = (i + 1 < matches.length) ? (matches[i + 1].index || fullHtml.length) : fullHtml.length;
-          const content = this.stripHtml(fullHtml.substring(startIdx, endIdx));
-          allArticles.push({ title, content });
-        }
-
-        // Create search terms pattern from tokens & expansions
-        const searchTerms = [...rawTokens];
-        rawTokens.forEach(t => {
-          if (termExpansions[t]) searchTerms.push(...termExpansions[t]);
-        });
-
-        if (searchTerms.length > 0) {
-          const regexStr = searchTerms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
-          const matcher = new RegExp(`\\b(?:${regexStr})`, 'i');
-
-          const matchedArticles = allArticles
-            .filter(a => matcher.test(a.content))
-            .slice(0, limit)
-            .map(a => a.content);
-
-          if (matchedArticles.length > 0) {
-            return matchedArticles;
-          }
+        if (best.length > 0) {
+          return best;
         }
       }
 
-      // 6. Last Fallback: Topic search
+      // 5. Last Fallback: Topic search
       const topics = ['debido proceso', 'derechos fundamentales', 'trabajo', 'familia', 'igualdad'];
       for (const t of topics) {
         if (query.toLowerCase().includes(t)) {
@@ -419,6 +390,193 @@ export class ConstituteService {
       console.warn('[ConstituteService] Error getting relevant articles:', error);
       return [];
     }
+  }
+
+  private getTermExpansions(): Record<string, string[]> {
+    return {
+      juventud: ['jóvenes', 'joven', 'educación', 'participación'],
+      jovenes: ['jóvenes', 'joven', 'educación', 'derechos'],
+      joven: ['jóvenes', 'juventud', 'educación'],
+      adolescente: ['niñez', 'jóvenes', 'protección'],
+      ninez: ['niños', 'niñas', 'familia', 'educación'],
+      trabajo: ['empleo', 'laboral', 'remuneración', 'trabajadores'],
+      salud: ['atención médica', 'seguridad social', 'vida'],
+      vivienda: ['hábitat', 'hogar', 'propiedad'],
+      debido: ['garantías judiciales', 'defensa', 'juez'],
+      proceso: ['debido proceso', 'garantías', 'justicia'],
+      igualdad: ['no discriminación', 'derechos', 'equidad'],
+      libertad: ['expresión', 'movilidad', 'asociación'],
+      alimentos: ['familia', 'pensión', 'hijos', 'niñez'],
+      // Protección al consumidor (Ecuador, Sección 9, Arts. 52-55).
+      // Nota: sinónimos genéricos ('defensa', 'calidad' suelta) NO van aquí
+      // porque aparecen en decenas de artículos y hunden el ranking.
+      proteccion: ['garantía', 'tutela', 'control de calidad'],
+      consumidor: ['consumidoras', 'consumidores', 'usuarias', 'usuarios', 'bienes de consumo', 'bienes y servicios', 'control de calidad', 'óptima calidad'],
+      consumidoras: ['consumidores', 'usuarias', 'bienes y servicios', 'control de calidad'],
+      usuarias: ['usuarios', 'consumidoras', 'consumidores', 'servicios públicos'],
+      consumo: ['bienes de consumo', 'consumidoras', 'consumidores'],
+      calidad: ['óptima calidad', 'control de calidad', 'bienes y servicios'],
+    };
+  }
+
+  private normalizeText(s: string): string {
+    if (!s) return '';
+    // Preservar ñ antes de strip diacríticos (NFD convierte ñ en n + virgulilla)
+    return s
+      .toLowerCase()
+      .replace(/ñ/g, '\u0001')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\u0001/g, 'ñ');
+  }
+
+  private tokenizeQuery(query: string): string[] {
+    const stop = new Set([
+      'para', 'como', 'sobre', 'este', 'esta', 'todo', 'toda', 'todos', 'todas',
+      'unos', 'unas', 'pero', 'ante', 'bajo', 'desde', 'entre', 'hasta',
+      'los', 'las', 'que', 'con', 'por', 'una', 'uno', 'sus', 'son', 'sea',
+      'ser', 'hay', 'muy', 'sin', 'mas', 'asi', 'tan', 'fue', 'esta', 'esto',
+    ]);
+    return this.normalizeText(query)
+      .replace(/[^a-z0-9ñ\s]/g, ' ')
+      .split(/\s+/)
+      .filter(t => t.length >= 3 && !stop.has(t));
+  }
+
+  private scoreArticlesLocal(
+    articles: { title: string; content: string }[],
+    rawTokens: string[],
+    normQuery: string,
+    queryNumbers: string[],
+    limit: number
+  ): string[] {
+    const expansions = this.getTermExpansions();
+    const total = Math.max(articles.length, 1);
+
+    // Pre-normalizar corpus una vez + DF para ponderación IDF:
+    // términos raros ('consumidor') pesan más que comunes ('proteccion').
+    const normed = articles.map(a => ({
+      title: a.title,
+      content: a.content,
+      normTitle: this.normalizeText(a.title),
+      normContent: this.normalizeText(a.content),
+    }));
+    const df = new Map<string, number>();
+    const countTerm = (term: string) => {
+      if (term.length < 3 || df.has(term)) return;
+      let n = 0;
+      for (const a of normed) {
+        if (a.normTitle.includes(term) || a.normContent.includes(term)) n++;
+      }
+      df.set(term, n);
+    };
+    for (const t of rawTokens) {
+      countTerm(t);
+      for (const syn of expansions[t] || []) countTerm(this.normalizeText(syn));
+    }
+    const idf = (term: string): number => {
+      const n = df.get(term) ?? total;
+      return 1 + Math.log(total / Math.max(n, 1));
+    };
+
+    const scored: { content: string; score: number; hits: number }[] = [];
+
+    for (const a of normed) {
+      const { normContent, normTitle } = a;
+      let score = 0;
+      let hits = 0;
+
+      // Bonus frase exacta
+      if (normQuery.length >= 4 && normContent.includes(normQuery)) {
+        score += 8;
+      }
+
+      // Bonus número de artículo explícito ("artículo 52")
+      for (const n of queryNumbers) {
+        if (new RegExp(`articulo\\s*${n}\\b`).test(normTitle) || new RegExp(`articulo\\s*${n}\\b`).test(normContent.slice(0, 120))) {
+          score += 20;
+          hits += 2;
+        }
+      }
+
+      for (const token of rawTokens) {
+        const w = idf(token);
+        let tokenHit = false;
+        if (normTitle.includes(token)) {
+          score += 10 * w;
+          tokenHit = true;
+        } else if (normContent.includes(token)) {
+          score += 5 * w;
+          tokenHit = true;
+        } else {
+          // Raíz singular/plural (consumidores -> consumidor)
+          const root = token.length > 4 ? token.replace(/(es|s)$/, '') : token;
+          if (root.length >= 4 && (normContent.includes(root) || normTitle.includes(root))) {
+            score += 3 * idf(root);
+            tokenHit = true;
+          }
+        }
+
+        // Sinónimos del token también cuentan como hit del token (intersección)
+        if (!tokenHit) {
+          const syns = expansions[token] || [];
+          for (const syn of syns) {
+            const normSyn = this.normalizeText(syn);
+            if (normSyn.length < 3) continue;
+            const ws = idf(normSyn);
+            if (normTitle.includes(normSyn)) {
+              score += 4 * ws;
+              tokenHit = true;
+              break;
+            }
+            if (normContent.includes(normSyn)) {
+              score += 3 * ws;
+              tokenHit = true;
+              break;
+            }
+          }
+        } else {
+          // Refuerzo semántico leve si además hay sinónimo
+          const syns = expansions[token] || [];
+          for (const syn of syns) {
+            const normSyn = this.normalizeText(syn);
+            if (normSyn.length < 3) continue;
+            if (normContent.includes(normSyn) || normTitle.includes(normSyn)) {
+              score += 1 * idf(normSyn);
+              break;
+            }
+          }
+        }
+
+        if (tokenHit) hits += 1;
+      }
+
+      // Bonus intersección: premia artículos que cubren varios tokens
+      if (hits >= 2) {
+        score += hits * 6;
+      }
+
+      // Bonus cluster jurídico conocido: Sección 9 Personas usuarias y
+      // consumidoras (Arts. 52-55). Garantiza que una consulta de consumo
+      // traiga el bloque completo aunque un artículo (ej. 54, redactado con
+      // "bienes de consumo") puntúe base más bajo que genéricos.
+      if (
+        (rawTokens.includes('consumidor') ||
+          rawTokens.includes('consumidoras') ||
+          rawTokens.includes('usuarias') ||
+          normQuery.includes('consum')) &&
+        /^articulo\s*5[2-5]\b/.test(normTitle)
+      ) {
+        score += 30;
+      }
+
+      if (score > 0) {
+        scored.push({ content: a.content, score, hits });
+      }
+    }
+
+    scored.sort((x, y) => y.score - x.score || y.hits - x.hits);
+    return scored.slice(0, limit).map(s => s.content);
   }
 
   private stripHtml(html: string): string {
