@@ -60,6 +60,16 @@ export class ConstituteService {
     this.baseUrl = process.env.CONSTITUTE_API_BASE_URL || 'https://www.constituteproject.org/service';
   }
 
+  /**
+   * Cache write with TTL. The timer is unref'd so it never keeps a
+   * Node process (scripts, tests, workers) alive on its own.
+   */
+  private cacheSet(key: string, value: any, ttlMs: number): void {
+    this.cache.set(key, value);
+    const timer = setTimeout(() => this.cache.delete(key), ttlMs);
+    if (typeof (timer as any)?.unref === 'function') (timer as any).unref();
+  }
+
   private resolveCountry(countryOrCode: string): string {
     const codeUpper = (countryOrCode || 'EC').toUpperCase();
     return this.countryMapping[codeUpper] || countryOrCode;
@@ -100,8 +110,7 @@ export class ConstituteService {
       }
 
       const data = await response.json();
-      this.cache.set(cacheKey, data);
-      setTimeout(() => this.cache.delete(cacheKey), 3600000); // 1 hr cache
+      this.cacheSet(cacheKey, data, 3600000); // 1 hr cache
 
       return data;
     } catch (error) {
@@ -144,8 +153,7 @@ export class ConstituteService {
       }
 
       const data = await response.json();
-      this.cache.set(cacheKey, data);
-      setTimeout(() => this.cache.delete(cacheKey), 1800000); // 30 min cache
+      this.cacheSet(cacheKey, data, 1800000); // 30 min cache
 
       return data;
     } catch (error) {
@@ -192,14 +200,34 @@ export class ConstituteService {
 
       const data = await response.json();
       const html = data?.html || '';
-      this.cache.set(cacheKey, html);
-      setTimeout(() => this.cache.delete(cacheKey), 86400000); // 24 hr cache
+      this.cacheSet(cacheKey, html, 86400000); // 24 hr cache
 
       return html;
     } catch (error) {
       console.warn('[ConstituteService] Error fetching constitution HTML:', error);
       return '';
     }
+  }
+
+  /**
+   * Structural headings (SECCIÓN/CAPÍTULO/TÍTULO/DISPOSICIÓN, h1-h6) never
+   * belong to an article's body: in Constitute HTML they sit between the
+   * previous article and the next one, so without stripping they pollute
+   * the previous article (ej. "SECCIÓN 9. Personas usuarias y consumidoras"
+   * terminaba dentro del Art. 51 y lo hacía rankear como "consumidor").
+   */
+  private structuralHeaderRes: RegExp[] = [
+    /<h[1-6][^>]*>[\s\S]*?<\/h[1-6]>/gi,
+    /<p[^>]*>\s*(SECCI[ÓO]N|CAP[ÍI]TULO|T[ÍI]TULO|DISPOSICI[ÓO]N|Secci[óo]n|Cap[íi]tulo|T[íi]tulo|Disposici[óo]n)\b[^<]*<\/p>/gi,
+  ];
+
+  private stripStructuralHeaders(htmlSlice: string): string {
+    let out = htmlSlice;
+    for (const re of this.structuralHeaderRes) {
+      re.lastIndex = 0;
+      out = out.replace(re, ' ');
+    }
+    return out;
   }
 
   /**
@@ -244,7 +272,7 @@ export class ConstituteService {
         const title = matches[i][1].trim();
         const startIdx = matches[i].index || 0;
         const endIdx = (i + 1 < matches.length) ? (matches[i + 1].index || fullHtml.length) : fullHtml.length;
-        const content = this.stripHtml(fullHtml.substring(startIdx, endIdx));
+        const content = this.stripHtml(this.stripStructuralHeaders(fullHtml.substring(startIdx, endIdx)));
         articles.push({
           id: `art_${i + 1}`,
           title,
@@ -258,8 +286,7 @@ export class ConstituteService {
         articles
       };
 
-      this.cache.set(cacheKey, result);
-      setTimeout(() => this.cache.delete(cacheKey), 86400000); // 24 hr cache
+      this.cacheSet(cacheKey, result, 86400000); // 24 hr cache
       return result;
     } catch (error) {
       console.warn('[ConstituteService] Error extracting all articles:', error);
@@ -392,6 +419,25 @@ export class ConstituteService {
     }
   }
 
+  /**
+   * Bloques jurídicos conocidos: si la consulta apunta al tema del bloque,
+   * sus artículos reciben un bonus para que el bloque llegue completo aunque
+   * algún artículo use una redacción distinta (ej. Art. 54: "bienes de
+   * consumo" en vez de "consumidor"). Verificado contra Ecuador_2021.
+   * Para añadir un bloque nuevo, agregar una entrada aquí (no regex sueltas).
+   */
+  private clusterBoosts: { tokens: string[]; titleRe: RegExp; bonus: number; comment: string }[] = [
+    { tokens: ['consumidor', 'consumidoras', 'consumidores', 'consumo', 'usuarias', 'usuarios'], titleRe: /^articulo\s*5[2-5]\b/, bonus: 30, comment: 'Sección 9: Personas usuarias y consumidoras' },
+    { tokens: ['debido', 'proceso'], titleRe: /^articulo\s*7[67]\b/, bonus: 30, comment: 'Garantías básicas del debido proceso' },
+  ];
+
+  private matchesCluster(rawTokens: string[], normQuery: string, tokens: string[]): boolean {
+    if (rawTokens.some(t => tokens.includes(t))) return true;
+    // Fallback sobre la frase completa con frontera de palabra: evita que
+    // 'procesos electorales' dispare el bloque de debido proceso.
+    return tokens.some(t => t.length >= 4 && new RegExp(`\\b${t}\\b`).test(normQuery));
+  }
+
   private getTermExpansions(): Record<string, string[]> {
     return {
       juventud: ['jóvenes', 'joven', 'educación', 'participación'],
@@ -499,75 +545,94 @@ export class ConstituteService {
         }
       }
 
+      let directHits = 0;
+      let synHits = 0;
+
       for (const token of rawTokens) {
         const w = idf(token);
-        let tokenHit = false;
+        let directHit = false;
         if (normTitle.includes(token)) {
           score += 10 * w;
-          tokenHit = true;
+          directHit = true;
         } else if (normContent.includes(token)) {
           score += 5 * w;
-          tokenHit = true;
-        } else {
+          directHit = true;
+        } else if (token.length >= 6) {
+          // Raíz léxica con frontera de palabra: 'consum' cubre
+          // consumo/consumidor/consumidoras; 'protec' cubre
+          // protección/protecciones. Pesa menos que el término exacto
+          // pero cuenta como coincidencia directa (mismo lexema).
+          const stemRe = new RegExp(`\\b${token.slice(0, 6)}`);
+          if (stemRe.test(normTitle)) {
+            score += 6 * w;
+            directHit = true;
+          } else if (stemRe.test(normContent)) {
+            score += 3 * w;
+            directHit = true;
+          }
+        }
+        if (!directHit) {
           // Raíz singular/plural (consumidores -> consumidor)
           const root = token.length > 4 ? token.replace(/(es|s)$/, '') : token;
           if (root.length >= 4 && (normContent.includes(root) || normTitle.includes(root))) {
             score += 3 * idf(root);
-            tokenHit = true;
+            directHit = true;
           }
         }
 
-        // Sinónimos del token también cuentan como hit del token (intersección)
-        if (!tokenHit) {
+        // Sinónimos del token: pesan menos y NO cuentan como hit directo.
+        // (Antes dos sinónimos genéricos simulaban intersección temática
+        // y colaban artículos irrelevantes por encima del bloque correcto.)
+        let synHit = false;
+        {
           const syns = expansions[token] || [];
           for (const syn of syns) {
             const normSyn = this.normalizeText(syn);
             if (normSyn.length < 3) continue;
             const ws = idf(normSyn);
             if (normTitle.includes(normSyn)) {
-              score += 4 * ws;
-              tokenHit = true;
+              score += (directHit ? 1 : 4) * ws;
+              synHit = true;
               break;
             }
             if (normContent.includes(normSyn)) {
-              score += 3 * ws;
-              tokenHit = true;
-              break;
-            }
-          }
-        } else {
-          // Refuerzo semántico leve si además hay sinónimo
-          const syns = expansions[token] || [];
-          for (const syn of syns) {
-            const normSyn = this.normalizeText(syn);
-            if (normSyn.length < 3) continue;
-            if (normContent.includes(normSyn) || normTitle.includes(normSyn)) {
-              score += 1 * idf(normSyn);
+              score += (directHit ? 1 : 3) * ws;
+              synHit = true;
               break;
             }
           }
         }
 
-        if (tokenHit) hits += 1;
+        if (directHit) {
+          directHits += 1;
+          hits += 1;
+        } else if (synHit) {
+          synHits += 1;
+          hits += 1;
+        }
       }
 
-      // Bonus intersección: premia artículos que cubren varios tokens
-      if (hits >= 2) {
-        score += hits * 6;
+      // Bonus cluster jurídico conocido (ver clusterBoosts): garantiza que
+      // una consulta temática traiga el bloque completo aunque un artículo
+      // use una redacción distinta (ej. Art. 54: "bienes de consumo";
+      // Art. 77: garantías en proceso penal sin decir "debido").
+      let clusterHit = false;
+      for (const cb of this.clusterBoosts) {
+        if (this.matchesCluster(rawTokens, normQuery, cb.tokens) && cb.titleRe.test(normTitle)) {
+          score += cb.bonus;
+          clusterHit = true;
+          break;
+        }
       }
 
-      // Bonus cluster jurídico conocido: Sección 9 Personas usuarias y
-      // consumidoras (Arts. 52-55). Garantiza que una consulta de consumo
-      // traiga el bloque completo aunque un artículo (ej. 54, redactado con
-      // "bienes de consumo") puntúe base más bajo que genéricos.
-      if (
-        (rawTokens.includes('consumidor') ||
-          rawTokens.includes('consumidoras') ||
-          rawTokens.includes('usuarias') ||
-          normQuery.includes('consum')) &&
-        /^articulo\s*5[2-5]\b/.test(normTitle)
-      ) {
-        score += 30;
+      // Intersección: premia artículos que cubren varios tokens con el
+      // término exacto (o su raíz). Pertenecer al bloque temático cuenta
+      // como una coincidencia más; los sinónimos solos dan un bonus menor.
+      const effDirect = directHits + (clusterHit ? 1 : 0);
+      if (effDirect >= 2) {
+        score += effDirect * 8;
+      } else if (directHits >= 1 && synHits >= 1) {
+        score += 4;
       }
 
       if (score > 0) {
