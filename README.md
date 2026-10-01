@@ -1,8 +1,12 @@
 # LeFri ⚖️🤝 — Legal Friend
-### *Plataforma Global de Orientación Legal, Derechos Ciudadanos y Justicia Temprana con IA*
+### *Global Open-Source Platform for AI-Powered Legal Guidance, Civic Rights & Early Justice*
 
-> **LeFri** *(diminutivo de **Legal Friend**)*: Democratizando el acceso universal a la justicia temprana, orientación legal empática y defensa de derechos humanos.  
-> Impulsado por Inteligencia Artificial Multi-Agente, integración constitucional internacional y canales omnicanal (Web, WhatsApp, Telegram, Voz).
+<p align="center">
+  <b><a href="README.es.md">Leer en Español 🇪🇸</a></b> | <b><a href="#-quick-start">Quick Start</a></b> | <b><a href="#-country-ambassadors-program">Country Ambassadors</a></b> | <b><a href="#-author--lead-architect">Author</a></b>
+</p>
+
+> **LeFri** *(short for **Legal Friend**)*: Democratizing universal access to early justice, empathetic legal orientation, and human rights defense.  
+> Powered by Multi-Agent Artificial Intelligence, international constitutional intelligence, and omnichannel accessibility (Web, WhatsApp, Telegram, Voice).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Online-success.svg)](https://lefri.fundacionunderlife.org)
@@ -13,133 +17,132 @@
 
 ---
 
-## 🌟 Visión e Historia: El Nacimiento de "Legal Friend"
+## 🌟 Vision & Story: The Birth of "Legal Friend"
 
-El derecho y las leyes a menudo resultan intimidantes, costosos y redactados en un lenguaje técnico inaccesible. Cuando una persona sufre una vulneración de derechos, un despido intempestivo o una situación de violencia, lo primero que necesita no es un juicio costoso, sino un **"Legal Friend" (un amigo legal)**: alguien de confianza que escuche su caso con empatía, le explique qué dice la ley en palabras sencillas y le señale las rutas de acción posibles.
+Laws and legal codes are often intimidating, cost-prohibitive, and shrouded in inaccessible jargon. When vulnerable citizens face wrongful termination, human rights violations, or family crises, they don't immediately need an expensive lawsuit—they need a **"Legal Friend"**: a trustworthy, empathetic ally that listens in plain language, cites actual statutes, and outlines viable courses of action.
 
-De esa visión nace **LeFri** *(Legal Friend)*, concebido como una plataforma **Open Source de impacto social** cuyo objetivo es romper estas barreras mediante:
-1. **Orientación Legal Gratuita e Instantánea:** Mediador ciudadano asistido por IA multi-agente con búsqueda de reformas en tiempo real (Tavily) y vector stores jurídicos (Pinecone RAG).
-2. **Contextualización Constitucional Multi-País:** Conexión nativa con **The Constitute Project API** para comparar artículos, tratados y constituciones de más de 20 naciones.
-3. **Botón de Emergencia y Triage Humanitario:** Mecanismo de auxilio ante emergencias graves, ordenado por heaps de prioridad y sincronización offline.
-4. **Asistente de Voz y Accesibilidad Universal:** Reconocimiento de voz para ciudadanos con analfabetismo o dificultades de escritura.
-5. **Canales Omnicanal Integrados:** Acceso vía Web App, WhatsApp (Baileys) y Telegram Bot.
+From this vision emerges **LeFri** *(Legal Friend)*, designed as a global **Open Source public-interest platform** to dismantle these barriers through:
 
----
-
-## 🏛️ Respaldado y Financiado por la Comunidad
-
-El despliegue en producción, servidores, infraestructura de red y modelos de IA en línea están financiados y respaldados gracias al compromiso social de:
-
-- **[Fundación Underlife](https://fundacionunderlife.org):** Impulso a proyectos de derechos humanos, asistencia a comunidades vulnerables y acceso a la justicia.
-- **[Weblifetech](https://weblifetech.com):** Aportando infraestructura Cloud, servidores VPS de alto rendimiento, microservicios de voz/IA y observabilidad con Langfuse.
-- **Liderazgo del Proyecto:** Jonnatan Peña (Ecuador) junto a la comunidad de desarrolladores y juristas independientes.
+1. **Instant, Free Legal Guidance:** Citizen mediator powered by multi-agent AI, real-time statute updates ([Tavily](https://tavily.com/)), and legal vector knowledge ([Pinecone RAG](https://www.pinecone.io/)).
+2. **Multi-Country Constitutional Intelligence:** Native integration with **The Constitute Project API** across 20+ Latin American and global jurisdictions.
+3. **Emergency Triage & Civic Assistance:** Priority heap dispatching ([`LegalTriageHeap`](server/services/data-structures/triage-heap.ts)) and offline queueing for urgent situations.
+4. **Voice Accessibility (Speech-to-Text):** Voice note input ensuring illiterate or low-literacy citizens can access justice without typing.
+5. **Omnichannel Messaging:** Direct access via Web App, WhatsApp (Baileys WebSocket engine), and Telegram Bot.
 
 ---
 
-## 🌎 Convocatoria Global: Programa de Embajadores por País
+## 🏛️ Sponsored & Powered by the Community
 
-Buscamos expandir **LeFriApp** a todas las naciones del mundo hispanohablante y global. Para lograrlo, abrimos el **Programa de Embajadores y Aliados Internacionales**:
+Production hosting, cloud VPS compute, AI inference pipelines, and network infrastructure are sponsored and backed by:
 
-### ¿A quién buscamos?
-- **Abogados, Juristas y Estudiantes de Derecho** con vocación social.
-- **Universidades y Consultorios Jurídicos Gratuitos**.
-- **ONGs de Derechos Humanos y Colectivos de Víctimas**.
-- **Desarrolladores y Comunidades Tecnológicas Open Source**.
-
-### Rol del Embajador:
-- **Adaptación Normativa:** Alimentar los RAG y prompts de los agentes con los códigos y leyes vigentes de su jurisdicción.
-- **Vínculos de Apoyo:** Conectar a abogados pro-bono locales con ciudadanos cuyos casos requieran representación formal.
-- **Despliegues Locales:** Difundir la plataforma o coordinar instancias federadas del proyecto.
-
-> 🤝 **¿Te interesa ser Embajador en tu país?**  
-> Consulta nuestra guía en [CONTRIBUTING.md](CONTRIBUTING.md) o escríbenos directamente a **[lefri@fundacionunderlife.org](mailto:lefri@fundacionunderlife.org)** con el asunto `[EMBAJADOR LEFRIAPP] - [País]`.
+- **[Fundación Underlife](https://fundacionunderlife.org):** Championing human rights, community welfare, and access to justice for vulnerable populations.
+- **[Weblifetech](https://weblifetech.com):** Providing high-performance Cloud VPS infrastructure, speech/audio microservices, and AI telemetry with Langfuse.
+- **Project Leadership:** Jonnatan Peña (Ecuador) in partnership with independent developers and pro-bono jurists worldwide.
 
 ---
 
-## 🏗️ Arquitectura Técnica y Tecnologías
+## 🌎 Global Call: Country Ambassadors Program
 
-El repositorio está construido bajo una arquitectura modular de alto rendimiento:
+We are actively expanding **LeFri (Legal Friend)** to every nation. We invite legal professionals, law faculties, and software engineers to join as **Country Ambassadors**:
+
+### Who We Are Looking For:
+- **Lawyers, Jurists & Law Students** passionate about social impact.
+- **University Legal Aid Clinics & Pro-Bono Organizations**.
+- **Human Rights NGOs & Advocacy Groups**.
+- **Open-Source Software Engineers & AI Researchers**.
+
+### Ambassador Responsibilities:
+- **Statutory Curation:** Enrich local vector databases and agent prompts with national codes, labor laws, and constitutional jurisprudence.
+- **Referral Networks:** Bridge citizens whose cases require court litigation to accredited legal aid clinics and pro-bono attorneys.
+- **Local Node Deployments:** Coordinate community instances and local outreach.
+
+> 🤝 **Want to become a Country Ambassador?**  
+> Read [CONTRIBUTING.md](CONTRIBUTING.md) or reach out directly to **[jonnathan@fundacionunderlife.org](mailto:jonnathan@fundacionunderlife.org)** with subject `[LEFRI AMBASSADOR] - [Your Country]`.
+
+---
+
+## 🏗️ Technical Architecture & Stack
+
+LeFri is engineered with a high-performance modular stack:
 
 - **Frontend:**
   - [React 18](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) + [Vite](https://vitejs.dev/)
-  - [Tailwind CSS](https://tailwindcss.com/) + [Radix UI](https://www.radix-ui.com/) / [shadcn/ui](https://ui.shadcn.com/)
-  - [i18next](https://www.i18next.com/) (Español, Inglés, Portugués en expansión)
+  - [Tailwind CSS](https://tailwindcss.com/) + [Radix UI](https://www.radix-ui.com/)
+  - [i18next](https://www.i18next.com/) (Trilingual: English, Spanish, Portuguese)
   - TanStack React Query & Framer Motion
-- **Backend & Orquestación:**
+- **Backend & AI Orchestration:**
   - [Node.js](https://nodejs.org/) & [Express](https://expressjs.com/)
-  - [Prisma ORM](https://www.prisma.io/) sobre MariaDB / MySQL
-  - Multi-Agent Orchestrator: Coordinator, Legal Research, Process Planning, Document Generation, Citizen Mediator.
-  - LLM Provider Agnostic: OpenAI (GPT-4o), Google Gemini, Groq (Llama 3.3).
-  - Grounding en tiempo real con [Tavily Search API](https://tavily.com/).
-  - Base de datos vectorial con [Pinecone](https://www.pinecone.io/).
-  - Integración Constitucional con [The Constitute Project](https://www.constituteproject.org/).
-- **Omnicanalidad & Servicios:**
-  - WhatsApp Business Engine (Baileys Multi-File Auth).
-  - Bot de Telegram para alertas de emergencia y soporte.
-  - Speech-To-Text vía MediaSuite STT microservice.
-  - Observabilidad y trazabilidad de prompts con [Langfuse](https://langfuse.com/) y [LangSmith](https://smith.langchain.com/).
+  - [Prisma ORM](https://www.prisma.io/) on MySQL / MariaDB
+  - **Multi-Agent Orchestrator:** Coordinator, Legal Research, Process Planning, Document Generation, Citizen Mediator.
+  - **Model Agnostic:** OpenAI (GPT-4o), Google Gemini, Groq (Llama 3.3).
+  - Grounding via [Tavily Search API](https://tavily.com/) and [Pinecone Vector DB](https://www.pinecone.io/).
+  - Comparative constitutional search via [The Constitute Project](https://www.constituteproject.org/).
+- **Omnichannel & Infrastructure:**
+  - Integrated WhatsApp Engine (Baileys Multi-File Auth).
+  - Telegram Emergency Alert Bot.
+  - Speech-To-Text via MediaSuite STT engine.
+  - LLM Observability & Traceability via [Langfuse](https://langfuse.com/) & [LangSmith](https://smith.langchain.com/).
 
 ---
 
-## 🚀 Despliegue y Puesta en Marcha Local
+## 🚀 Quick Start (Local Development)
 
-### Prerrequisitos
+### Prerequisites
 - Node.js >= 20.x
-- MariaDB o MySQL >= 8.0
-- npm o pnpm
+- MySQL or MariaDB >= 8.0
+- npm or pnpm
 
-### Pasos de Instalación
+### Setup Instructions
 
-1. **Clonar el repositorio:**
+1. **Clone the repository:**
    ```bash
    git clone https://github.com/jonnathanypg/LeFriApp.git
    cd LeFriApp
    ```
 
-2. **Instalar dependencias:**
+2. **Install dependencies:**
    ```bash
    npm install
    ```
 
-3. **Configurar el entorno:**
-   Copia el archivo de variables sanitizadas para la comunidad:
+3. **Configure Environment Variables:**
    ```bash
    cp .env.example .env
    ```
-   Edita las credenciales básicas (`DATABASE_URL`, claves de IA como `OPENAI_API_KEY` o `GEMINI_API_KEY`).
+   Add your database connection string (`DATABASE_URL`) and preferred AI keys (`OPENAI_API_KEY`, `GEMINI_API_KEY`, etc.).
 
-4. **Inicializar la base de datos:**
+4. **Initialize Database:**
    ```bash
    npx prisma generate
    npx prisma db push
    ```
 
-5. **Iniciar en modo desarrollo:**
+5. **Start Development Server:**
    ```bash
    npm run dev
    ```
-   La aplicación estará disponible de inmediato en `http://localhost:8080`.
+   Access the web app at `http://localhost:8080`.
 
 ---
 
-## 🔒 Privacidad, Ética y Responsabilidad Legal
+## 🔒 Privacy, Ethics & Legal Disclaimer
 
-- **Carácter Informativo:** LeFriApp provee orientación general y educativa en derechos; nunca formula asesoría jurídica formal ni garantiza resultados en procesos judiciales.
-- **Minimización de Datos:** La plataforma no recolecta documentos sensibles como números de cuenta, cédulas o datos de menores de edad.
-- **Seguridad en Producción:** Sesiones protegidas por tokens cifrados (`express-session` con almacén MySQL), encabezados seguros y validación de tipos con Zod.
-
----
-
-## 🤝 Cómo Contribuir
-
-¡Las contribuciones de desarrolladores, diseñadores, lingüistas y juristas son el corazón de LeFriApp!  
-Por favor lee nuestro [CONTRIBUTING.md](CONTRIBUTING.md) para conocer las pautas de estilo, cómo reportar issues o cómo enviar Pull Requests.
+- **Informative Nature:** LeFri provides educational, civic, and informational guidance. It DOES NOT provide formal legal advice, court representation, nor does it guarantee judicial outcomes.
+- **Data Minimization:** The system strictly minimizes data collection and does not store sensitive identity credentials, financial numbers, or minor child information.
+- **Enterprise Security:** Encrypted session cookies, TLS endpoints, and Zod runtime schema validation.
 
 ---
 
-## 👨‍💻 Autor y Creador Principal
+## 🤝 Contributing
 
-Este proyecto fue ideado, diseñado y desarrollado por:
+Contributions from developers, legal scholars, translators, and designers are welcome!  
+Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for code standards, reporting issues, and submitting Pull Requests.
+
+---
+
+## 👨‍💻 Author & Lead Architect
+
+This project was conceived, designed, and developed by:
 
 <div align="center">
   <h3><b>Jonnatan Peña</b></h3>
@@ -149,18 +152,18 @@ Este proyecto fue ideado, diseñado y desarrollado por:
       <img src="https://img.shields.io/badge/GitHub-jonnathanypg-181717?style=flat&logo=github" alt="GitHub Profile" />
     </a>
   </p>
-  <p><i>Comprometido con el uso de la Inteligencia Artificial, el software de código abierto y la tecnología para democratizar el acceso a la justicia y los derechos humanos.</i></p>
+  <p><i>Dedicated to leveraging Artificial Intelligence, Open-Source Software, and civic technology to democratize human rights and access to justice globally.</i></p>
 </div>
 
 ---
 
-## 📄 Licencia
+## 📄 License
 
-Este proyecto está liberado para el beneficio de la comunidad bajo la licencia **[MIT License](LICENSE)**.
+This project is licensed under the **[MIT License](LICENSE)**.
 
 ---
 
 <p align="center">
-  <b>LeFri (Legal Friend)</b> · Hecho con ❤️ para la defensa de los derechos ciudadanos y la justicia social en todo el mundo.<br/>
+  <b>LeFri (Legal Friend)</b> · Crafted with ❤️ for citizen empowerment and human rights defense across the globe.<br/>
   <b>Fundación Underlife & Weblifetech</b>
 </p>

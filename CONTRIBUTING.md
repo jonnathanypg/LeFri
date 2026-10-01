@@ -1,84 +1,89 @@
-# 🤝 Guía de Contribución y Adopción Internacional en LeFri (Legal Friend)
+# 🤝 Contributing & Country Ambassadors Guide
 
-¡Gracias por tu interés en sumarte a **LeFri** *(Legal Friend)*! Este es un proyecto **Open Source** con impacto social global, nacido bajo el patrocinio tecnológico y de infraestructura de la **Fundación Underlife** y **Weblifetech**, liderado por **Jonnatan Peña**.
+<p align="center">
+  <b><a href="CONTRIBUTING.es.md">Guía en Español 🇪🇸</a></b>
+</p>
 
-Nuestra misión es **democratizar el acceso a la orientación legal, justicia temprana y derechos ciudadanos a nivel mundial**, actuando como un amigo legal empático y transparente que combina modelos de inteligencia artificial multi-agente, datos constitucionales abiertos y canales accesibles (Web, WhatsApp, Telegram, Voz).
+Thank you for your interest in contributing to **LeFri** *(Legal Friend)*! This is an open-source, public-interest initiative sponsored by **Fundación Underlife** and **Weblifetech**, led by **Jonnatan Peña**.
 
----
-
-## 🌎 Red de Embajadores por País (Country Ambassadors)
-
-Estamos en búsqueda activa de **Embajadores y Organizaciones Aliadas** en cada país para adaptar y desplegar **LeFri (Legal Friend)** a sus marcos normativos específicos:
-
-### ¿Qué hace un Embajador de LeFriApp?
-1. **Curaduría Normativa y Jurisdiccional:**
-   - Incorporar códigos orgánicos, leyes primarias y constituciones del país en la base de conocimientos RAG (`Pinecone` y `scripts/seed-laws.ts`).
-   - Mapear las entidades públicas de auxilio y derechos humanos locales en el servicio de emergencia (`server/services/data-structures/triage-heap.ts`).
-2. **Localización de Lenguaje y Dialectos:**
-   - Supervisar y enriquecer las traducciones en `client/public/locales/[código_país]` y vocabulario jurídico local en `LegalConceptTrie`.
-3. **Alianzas Institucionales:**
-   - Vincular consultorios jurídicos gratuitos universitarios, ONGs defensoras de DDHH y colegios de abogados.
-4. **Instancias y Despliegues Locales:**
-   - Orientar a comunidades que deseen levantar su propio fork o nodo federado de LeFriApp.
-
-> 📬 **¿Quieres ser Embajador en tu país?**  
-> Escríbenos a **[lefri@fundacionunderlife.org](mailto:lefri@fundacionunderlife.org)** con el asunto `[EMBAJADOR LEFRIAPP] - [Tu País] - [Tu Nombre/Organización]`.
+Our mission is to **democratize universal access to legal orientation, early justice, and citizen rights**, serving as a transparent, empathetic AI ally powered by multi-agent architectures, constitutional intelligence, and accessible channels (Web, WhatsApp, Telegram, Voice).
 
 ---
 
-## 🛠️ Cómo Contribuir con Código
+## 🌎 Country Ambassadors Network
 
-### 1. Preparación del Entorno
-1. Haz un fork del repositorio en GitHub: `https://github.com/jonnathanypg/LeFriApp`
-2. Clona tu bifurcación:
+We are actively recruiting **Country Ambassadors and Partner Organizations** worldwide to localize and deploy **LeFri (Legal Friend)** to national legal frameworks:
+
+### What Does a Country Ambassador Do?
+1. **Statutory & Jurisprudential Curation:**
+   - Integrate national constitutions, statutory codes, and labor laws into our RAG pipelines (`Pinecone` & `scripts/seed-laws.ts`).
+   - Map local human rights agencies, emergency response lines, and pro-bono clinics into the emergency triage engine (`server/services/data-structures/triage-heap.ts`).
+2. **Language & Dialect Localization:**
+   - Supervise and refine translations under `client/public/locales/[country_code]` and local legal terminology in `LegalConceptTrie`.
+3. **Institutional Alliances:**
+   - Connect university legal clinics, human rights NGOs, and bar associations.
+4. **Local Deployments & Outreach:**
+   - Guide community instances and advocate for citizen empowerment.
+
+> 📬 **Apply to Become an Ambassador in Your Country:**  
+> Email us directly at **[jonnathan@fundacionunderlife.org](mailto:jonnathan@fundacionunderlife.org)** with subject:  
+> `[LEFRI AMBASSADOR] - [Your Country] - [Your Name / Organization]`.
+
+---
+
+## 🛠️ Developer Contribution Workflow
+
+### 1. Environment Setup
+1. Fork the repository on GitHub: `https://github.com/jonnathanypg/LeFriApp`
+2. Clone your fork:
    ```bash
-   git clone https://github.com/TU_USUARIO/LeFriApp.git
+   git clone https://github.com/YOUR_USERNAME/LeFriApp.git
    cd LeFriApp
    ```
-3. Instala las dependencias:
+3. Install dependencies:
    ```bash
    npm install
    ```
-4. Configura tus variables de desarrollo:
+4. Set up development environment:
    ```bash
    cp .env.example .env
-   # Edita .env con tus credenciales de desarrollo locales
+   # Edit .env with your local development credentials
    ```
-5. Sincroniza la base de datos (Prisma ORM):
+5. Synchronize the database schema (Prisma ORM):
    ```bash
    npx prisma generate
    npx prisma db push
    ```
-6. Inicia el servidor de desarrollo:
+6. Start development server:
    ```bash
    npm run dev
    ```
 
-### 2. Flujo de Ramas y Commits
-- Crea una rama descriptiva para tu funcionalidad:
+### 2. Branches & Commits
+- Create a feature branch:
   ```bash
-  git checkout -b feature/adaptacion-codigo-laboral-co
-  # o para correcciones
-  git checkout -b fix/whatsapp-reconnect-issue
+  git checkout -b feature/labor-code-colombia
+  # or for fixes
+  git checkout -b fix/whatsapp-reconnect
   ```
-- Usa mensajes de commit semánticos (`feat:`, `fix:`, `docs:`, `i18n:`, `refactor:`).
-- Asegúrate de verificar los tipos y calidad antes de enviar:
+- Use conventional semantic commits (`feat:`, `fix:`, `docs:`, `i18n:`, `refactor:`).
+- Verify TypeScript types before committing:
   ```bash
   npm run check
   ```
 
-### 3. Principios de Ética y Responsabilidad Legal de la IA
-Todo código, prompt de agente o función que se añada a LeFriApp debe cumplir rigurosamente con:
-- **Naturaleza Informativa:** Los agentes de IA nunca garantizan resultados legales ni reemplazan formalmente al abogado habilitado; guían al ciudadano en sus derechos y rutas de acción.
-- **Minimización de Datos:** Jamás registrar o almacenar innecesariamente documentos de identidad personales, contraseñas o datos de menores.
-- **Triage Humanitario:** En situaciones de violencia o riesgo inminente, el sistema debe priorizar el auxilio inmediato y canales de emergencia.
+### 3. Ethical Principles & Legal Responsibility
+Every contribution, prompt, and function must strictly adhere to:
+- **Informative Nature:** Agents guide and educate; they never guarantee judicial outcomes nor replace licensed attorneys.
+- **Data Minimization:** Never collect, store, or log sensitive government IDs, passwords, financial records, or minors' data.
+- **Humanitarian Triage:** Urgent crises (violence, detention) must prioritize official rescue channels and emergency contacts.
 
 ---
 
-## 💡 Áreas Prioritarias de Contribución
-- 🌐 **Nuevos Idiomas y Lenguas Nativas:** Traducción a Quechua, Guaraní, Aymara, Maya, Portugués, Francés.
-- 🏛️ **Adaptadores Jurídicos por País:** Soporte profundo con The Constitute Project y gacetas oficiales de cada nación.
-- 🎙️ **Accesibilidad y Voz:** Optimización del reconocimiento de voz en dialectos regionales.
-- 📱 **Canales Omnicanal:** Mejoras en la resiliencia de bots de WhatsApp y Telegram para personas de bajos recursos y sin conectividad continua.
+## 💡 Priority Roadmap
+- 🌐 **New Languages & Native Dialects:** Quechua, Guaraní, Aymara, Maya, Portuguese, French.
+- 🏛️ **National Constitutional Adapters:** Integration with The Constitute Project and official legal gazettes.
+- 🎙️ **Voice Accessibility:** Enhancing speech-to-text accuracy across regional accents.
+- 📱 **Omnichannel Resilience:** Offline caching and messaging bot optimizations.
 
-¡Tu aporte construye justicia accesible para miles de personas! ⚖️🤝
+Join us in building accessible justice for everyone! ⚖️🤝
