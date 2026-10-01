@@ -445,7 +445,7 @@ export default function ConstitucionPage() {
                 }}
                 className="border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 rounded-xl text-xs px-3"
               >
-                Ver todos
+                {t.viewAll || "Ver todos"}
               </Button>
             )}
             <Button type="submit" className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl px-5">
@@ -470,7 +470,7 @@ export default function ConstitucionPage() {
                   : 'bg-slate-900 border-slate-800 hover:border-indigo-500/50 text-slate-300 hover:text-white'
               }`}
             >
-              📖 Todos los artículos
+              📖 {language === 'en' ? 'All articles' : language === 'pt' ? 'Todos os artigos' : 'Todos los artículos'}
             </button>
             {topicSuggestions.map((topic) => {
               const isTopicActive = activeSearch.toLowerCase() === topic.query.toLowerCase();
@@ -564,7 +564,11 @@ export default function ConstitucionPage() {
                       onClick={() => setVisibleCount(prev => prev + 12)}
                       className="w-full py-2 border-slate-800 bg-slate-900/80 hover:bg-slate-800 text-slate-300 text-xs rounded-xl font-medium"
                     >
-                      Cargar más artículos ({exploreData.articles.length - visibleCount} restantes)
+                      {language === 'en' 
+                        ? `Load more articles (${exploreData.articles.length - visibleCount} remaining)`
+                        : language === 'pt'
+                        ? `Carregar mais artigos (${exploreData.articles.length - visibleCount} restantes)`
+                        : `Cargar más artículos (${exploreData.articles.length - visibleCount} restantes)`}
                     </Button>
                   </div>
                 )}

@@ -295,8 +295,8 @@ export default function TerminosServicio() {
               </h2>
               <p>
                 {t.sec9Text}
-                <a href="mailto:lefri@fundacionunderlife.org" className="text-indigo-400 underline font-medium">
-                  lefri@fundacionunderlife.org
+                <a href="mailto:jonnathan@fundacionunderlife.org" className="text-indigo-400 underline font-medium">
+                  jonnathan@fundacionunderlife.org
                 </a>.
               </p>
             </section>

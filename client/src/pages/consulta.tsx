@@ -64,7 +64,7 @@ export default function Consulta() {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">
                   {t.consultation || "Orientación Jurídica Inmediata"}
                 </h1>
-                <p className="text-xs text-slate-400">Orientación informativa fundamentada en normas — Esta orientación es informativa y no constituye asesoría jurídica ni garantiza un resultado legal.</p>
+                <p className="text-xs text-slate-400">{t.disclaimer}</p>
               </div>
             </div>
             

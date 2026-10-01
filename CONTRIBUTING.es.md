@@ -22,7 +22,7 @@ Estamos en búsqueda activa de **Embajadores y Organizaciones Aliadas** en cada 
    - Orientar a comunidades que deseen levantar su propio fork o nodo federado de LeFriApp.
 
 > 📬 **¿Quieres ser Embajador en tu país?**  
-> Escríbenos a **[lefri@fundacionunderlife.org](mailto:lefri@fundacionunderlife.org)** con el asunto `[EMBAJADOR LEFRIAPP] - [Tu País] - [Tu Nombre/Organización]`.
+> Escríbenos a **[jonnathan@fundacionunderlife.org](mailto:jonnathan@fundacionunderlife.org)** con el asunto `[EMBAJADOR LEFRIAPP] - [Tu País] - [Tu Nombre/Organización]`.
 
 ---
 

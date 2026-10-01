@@ -56,7 +56,7 @@ Buscamos expandir **LeFriApp** a todas las naciones del mundo hispanohablante y 
 - **Despliegues Locales:** Difundir la plataforma o coordinar instancias federadas del proyecto.
 
 > 🤝 **¿Te interesa ser Embajador en tu país?**  
-> Consulta nuestra guía en [CONTRIBUTING.md](CONTRIBUTING.md) o escríbenos directamente a **[lefri@fundacionunderlife.org](mailto:lefri@fundacionunderlife.org)** con el asunto `[EMBAJADOR LEFRIAPP] - [País]`.
+> Consulta nuestra guía en [CONTRIBUTING.md](CONTRIBUTING.md) o escríbenos directamente a **[jonnathan@fundacionunderlife.org](mailto:jonnathan@fundacionunderlife.org)** con el asunto `[EMBAJADOR LEFRIAPP] - [País]`.
 
 ---
 

@@ -313,7 +313,7 @@ export default function PoliticaPrivacidad() {
               <ul className="list-disc pl-5 space-y-1 text-slate-300 text-sm">
                 <li><strong>{t.s1Entity}</strong> Fundación Underlife / Proyecto LeFri</li>
                 <li><strong>{t.s1Dpo}</strong> {t.s1DpoRole}</li>
-                <li><strong>{t.s1Email}</strong> <a href="mailto:lefri@fundacionunderlife.org" className="text-indigo-400 underline font-medium">lefri@fundacionunderlife.org</a></li>
+                <li><strong>{t.s1Email}</strong> <a href="mailto:jonnathan@fundacionunderlife.org" className="text-indigo-400 underline font-medium">jonnathan@fundacionunderlife.org</a></li>
                 <li><strong>{t.s1Jurisdiction}</strong> {t.s1JurisdictionDesc}</li>
               </ul>
             </section>
@@ -451,7 +451,7 @@ export default function PoliticaPrivacidad() {
                 </div>
               </div>
               <p className="text-xs text-slate-400 pt-2">
-                {t.s6Contact} <a href="mailto:lefri@fundacionunderlife.org" className="text-indigo-400 underline font-medium">lefri@fundacionunderlife.org</a>. {t.s6Time}
+                {t.s6Contact} <a href="mailto:jonnathan@fundacionunderlife.org" className="text-indigo-400 underline font-medium">jonnathan@fundacionunderlife.org</a>. {t.s6Time}
               </p>
             </section>
 
