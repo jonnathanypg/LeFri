@@ -3,7 +3,7 @@ import {
   Scale, BookOpen, Search, Sparkles, ArrowRight, CheckCircle2, 
   AlertTriangle, FileText, BookmarkCheck,
   Compass, HeartHandshake, Users, Lightbulb,
-  Building2, MapPin, Check
+  Building2, MapPin, Check, Github, GitBranch
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -64,6 +64,18 @@ export default function LandingHome() {
                 PT
               </button>
             </div>
+
+            {/* GitHub Open Source Link */}
+            <a 
+              href="https://github.com/jonnathanypg/LeFriApp" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-200 hover:text-white transition"
+              title="GitHub Open Source Repository"
+            >
+              <Github className="w-3.5 h-3.5 text-indigo-400" />
+              <span>Open Source</span>
+            </a>
 
             <Button 
               variant="default"
@@ -937,6 +949,51 @@ export default function LandingHome() {
               <BookOpen className="w-4 h-4 text-teal-400" />
               <span>{t.btnExploreConstitution}</span>
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── Open Source & Country Ambassadors Callout ─────────────── */}
+      <section className="py-14 bg-gradient-to-b from-slate-950 via-slate-900/50 to-slate-950 border-t border-slate-800/80">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-br from-indigo-950/40 via-slate-900/80 to-slate-900/40 border border-indigo-500/20 backdrop-blur shadow-xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+              <div className="text-center md:text-left space-y-2 max-w-2xl">
+                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold uppercase tracking-wider mb-2">
+                  <GitBranch className="w-3.5 h-3.5" />
+                  <span>Open Source · Código Abierto Global</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
+                  Construyamos el <span className="bg-gradient-to-r from-teal-300 to-indigo-300 bg-clip-text text-transparent">Legal Friend</span> de cada país
+                </h3>
+                <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+                  LeFri es un proyecto 100% de código abierto patrocinado por <strong>Fundación Underlife</strong> y <strong>Weblifetech</strong>. Buscamos abogados, universidades y desarrolladores para incorporar las leyes de su nación como <strong>Embajadores por País</strong>.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                <a
+                  href="https://github.com/jonnathanypg/LeFriApp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center space-x-2 px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold text-sm border border-slate-700 shadow transition hover:scale-[1.02]"
+                >
+                  <Github className="w-4 h-4 text-indigo-400" />
+                  <span>Ver en GitHub</span>
+                </a>
+                <a
+                  href="https://github.com/jonnathanypg/LeFriApp/blob/main/CONTRIBUTING.md"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center space-x-2 px-5 py-3 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-teal-500/20 transition hover:scale-[1.02]"
+                >
+                  <Heart className="w-4 h-4" />
+                  <span>Ser Embajador</span>
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>

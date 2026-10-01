@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield } from 'lucide-react';
+import { Shield, GitBranch, Github, Heart } from 'lucide-react';
 import { Link } from 'wouter';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -9,30 +9,39 @@ export function Footer() {
   const labels = {
     es: {
       brand: "LeFri (Legal Friend) • Fundación Underlife",
-      mission: "Plataforma cívica para el acceso a la justicia y alfabetización constitucional.",
+      mission: "Plataforma cívica y Open Source para el acceso universal a la justicia y derechos humanos.",
       privacy: "Privacidad (LOPDP / RGPD)",
       terms: "Términos de Servicio",
       cookies: "Política de Cookies",
-      rights: "LeFri (Legal Friend) © 2026. Todos los derechos reservados.",
+      rights: "LeFri (Legal Friend) © 2026. Licencia MIT de Código Abierto.",
       security: "Privacidad blindada y cifrado TLS / AES-256",
+      openSourceBadge: "Proyecto Open Source",
+      contribute: "Colaborar en GitHub",
+      ambassadors: "Red de Embajadores",
     },
     en: {
       brand: "LeFri (Legal Friend) • Fundación Underlife",
-      mission: "Civic platform for justice empowerment and constitutional literacy.",
+      mission: "Civic and Open Source platform for universal access to justice and human rights.",
       privacy: "Privacy Policy (LOPDP / GDPR)",
       terms: "Terms of Service",
       cookies: "Cookie Policy",
-      rights: "LeFri (Legal Friend) © 2026. All rights reserved.",
+      rights: "LeFri (Legal Friend) © 2026. MIT Open Source License.",
       security: "Hardened privacy & TLS / AES-256 encryption",
+      openSourceBadge: "Open Source Project",
+      contribute: "Contribute on GitHub",
+      ambassadors: "Ambassadors Program",
     },
     pt: {
       brand: "LeFri (Legal Friend) • Fundación Underlife",
-      mission: "Plataforma cívica para acesso à justiça e conscientização constitucional.",
+      mission: "Plataforma cívica e Open Source para acesso universal à justiça e direitos humanos.",
       privacy: "Privacidade (LOPDP / RGPD)",
       terms: "Termos de Serviço",
       cookies: "Política de Cookies",
-      rights: "LeFri (Legal Friend) © 2026. Todos os direitos reservados.",
+      rights: "LeFri (Legal Friend) © 2026. Licença MIT de Código Aberto.",
       security: "Privacidade blindada e criptografia TLS / AES-256",
+      openSourceBadge: "Projeto Open Source",
+      contribute: "Contribuir no GitHub",
+      ambassadors: "Rede de Embaixadores",
     }
   };
 
@@ -41,9 +50,44 @@ export function Footer() {
   return (
     <footer className="border-t border-slate-800/80 bg-slate-950 py-8 text-slate-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* Open Source Community Spotlight Bar */}
+        <div className="mb-6 pb-6 border-b border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+          <div className="flex items-center space-x-2 text-slate-300">
+            <span className="flex h-2 w-2 relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-500"></span>
+            </span>
+            <span className="font-semibold text-white">{t.openSourceBadge}</span>
+            <span className="text-slate-500">•</span>
+            <span className="text-slate-400">Patrocinado por Fundación Underlife & Weblifetech</span>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <a 
+              href="https://github.com/jonnathanypg/LeFriApp" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-1.5 text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-800 transition"
+            >
+              <Github className="w-3.5 h-3.5 text-indigo-400" />
+              <span>{t.contribute}</span>
+            </a>
+            <a 
+              href="https://github.com/jonnathanypg/LeFriApp/blob/main/CONTRIBUTING.md" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center space-x-1 text-teal-400 hover:text-teal-300 transition"
+            >
+              <GitBranch className="w-3.5 h-3.5" />
+              <span>{t.ambassadors}</span>
+            </a>
+          </div>
+        </div>
+
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           
-          {/* Brand & Mission (Clean text without icon) */}
+          {/* Brand & Mission */}
           <div className="text-center md:text-left">
             <p className="text-xs font-semibold text-white tracking-wide">
               {t.brand}
@@ -53,7 +97,7 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Legal Navigation Links - Single horizontal row on desktop & tablet */}
+          {/* Legal Navigation Links */}
           <nav className="flex flex-nowrap items-center justify-center gap-x-2 sm:gap-x-3 text-[10.5px] sm:text-xs text-slate-400 whitespace-nowrap overflow-x-auto py-1">
             <Link 
               href="/privacidad" 
