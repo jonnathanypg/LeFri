@@ -2,7 +2,7 @@
 ### *Global Open-Source Platform for AI-Powered Legal Guidance, Civic Rights & Early Justice*
 
 <p align="center">
-  <b><a href="README.es.md">Leer en Español 🇪🇸</a></b> | <b><a href="#-quick-start">Quick Start</a></b> | <b><a href="#-country-ambassadors-program">Country Ambassadors</a></b> | <b><a href="#-author--lead-architect">Author</a></b>
+  <b><a href="README.es.md">Leer en Español 🇪🇸</a></b> | <b><a href="#quick-start">Quick Start</a></b> | <b><a href="#country-ambassadors">Country Ambassadors</a></b> | <b><a href="#author">Author</a></b>
 </p>
 
 > **LeFri** *(short for **Legal Friend**)*: Democratizing universal access to early justice, empathetic legal orientation, and human rights defense.  
@@ -41,7 +41,7 @@ Production hosting, cloud VPS compute, AI inference pipelines, and network infra
 
 ---
 
-## 🌎 Global Call: Country Ambassadors Program
+## <a id="country-ambassadors"></a>🌎 Global Call: Country Ambassadors Program
 
 We are actively expanding **LeFri (Legal Friend)** to every nation. We invite legal professionals, law faculties, and software engineers to join as **Country Ambassadors**:
 
@@ -85,7 +85,7 @@ LeFri is engineered with a high-performance modular stack:
 
 ---
 
-## 🚀 Quick Start (Local Development)
+## <a id="quick-start"></a>🚀 Quick Start (Local Development)
 
 ### Prerequisites
 - Node.js >= 20.x
@@ -140,7 +140,7 @@ Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for code standards, reporting
 
 ---
 
-## 👨‍💻 Author & Lead Architect
+## <a id="author"></a>👨‍💻 Author & Lead Architect
 
 This project was conceived, designed, and developed by:
 

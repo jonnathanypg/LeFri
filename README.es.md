@@ -2,7 +2,7 @@
 ### *Plataforma Global de Orientación Legal, Derechos Ciudadanos y Justicia Temprana con IA*
 
 <p align="center">
-  <b><a href="README.md">Read in English 🇬🇧</a></b> | <b><a href="#-despliegue-y-puesta-en-marcha-local">Inicio Rápido</a></b> | <b><a href="#-convocatoria-global-programa-de-embajadores-por-pa%C3%ADs">Embajadores por País</a></b> | <b><a href="#-autor-y-creador-principal">Autor</a></b>
+  <b><a href="README.md">Read in English 🇬🇧</a></b> | <b><a href="#inicio-rapido">Inicio Rápido</a></b> | <b><a href="#embajadores-por-pais">Embajadores por País</a></b> | <b><a href="#autor">Autor</a></b>
 </p>
 
 > **LeFri** *(diminutivo de **Legal Friend**)*: Democratizando el acceso universal a la justicia temprana, orientación legal empática y defensa de derechos humanos.  
@@ -40,7 +40,7 @@ El despliegue en producción, servidores, infraestructura de red y modelos de IA
 
 ---
 
-## 🌎 Convocatoria Global: Programa de Embajadores por País
+## <a id="embajadores-por-pais"></a>🌎 Convocatoria Global: Programa de Embajadores por País
 
 Buscamos expandir **LeFriApp** a todas las naciones del mundo hispanohablante y global. Para lograrlo, abrimos el **Programa de Embajadores y Aliados Internacionales**:
 
@@ -85,7 +85,7 @@ El repositorio está construido bajo una arquitectura modular de alto rendimient
 
 ---
 
-## 🚀 Despliegue y Puesta en Marcha Local
+## <a id="inicio-rapido"></a>🚀 Despliegue y Puesta en Marcha Local
 
 ### Prerrequisitos
 - Node.js >= 20.x
@@ -141,7 +141,7 @@ Por favor lee nuestro [CONTRIBUTING.md](CONTRIBUTING.md) para conocer las pautas
 
 ---
 
-## 👨‍💻 Autor y Creador Principal
+## <a id="autor"></a>👨‍💻 Autor y Creador Principal
 
 Este proyecto fue ideado, diseñado y desarrollado por:
 
