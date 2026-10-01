@@ -3,7 +3,7 @@ import {
   Scale, BookOpen, Search, Sparkles, ArrowRight, CheckCircle2, 
   AlertTriangle, FileText, BookmarkCheck,
   Compass, HeartHandshake, Users, Lightbulb,
-  Building2, MapPin, Check, Github, GitBranch
+  Building2, MapPin, Check, Github, GitBranch, Heart
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
