@@ -1,14 +1,14 @@
-# 🤝 Guía de Contribución y Adopción Internacional en LeFriApp
+# 🤝 Guía de Contribución y Adopción Internacional en LeFri (Legal Friend)
 
-¡Gracias por tu interés en sumarte a **LeFriApp**! Este es un proyecto **Open Source** con impacto social global, nacido bajo el patrocinio tecnológico y de infraestructura de la **Fundación Underlife** y **Weblifetech**, liderado por **Jonnatan Peña**.
+¡Gracias por tu interés en sumarte a **LeFri** *(Legal Friend)*! Este es un proyecto **Open Source** con impacto social global, nacido bajo el patrocinio tecnológico y de infraestructura de la **Fundación Underlife** y **Weblifetech**, liderado por **Jonnatan Peña**.
 
-Nuestra misión es **democratizar el acceso a la orientación legal, justicia temprana y derechos ciudadanos a nivel mundial**, combinando modelos de inteligencia artificial multi-agente, datos constitucionales abiertos y canales accesibles (Web, WhatsApp, Telegram, Voz).
+Nuestra misión es **democratizar el acceso a la orientación legal, justicia temprana y derechos ciudadanos a nivel mundial**, actuando como un amigo legal empático y transparente que combina modelos de inteligencia artificial multi-agente, datos constitucionales abiertos y canales accesibles (Web, WhatsApp, Telegram, Voz).
 
 ---
 
 ## 🌎 Red de Embajadores por País (Country Ambassadors)
 
-Estamos en búsqueda activa de **Embajadores y Organizaciones Aliadas** en cada país para adaptar y desplegar LeFriApp a sus marcos normativos específicos:
+Estamos en búsqueda activa de **Embajadores y Organizaciones Aliadas** en cada país para adaptar y desplegar **LeFri (Legal Friend)** a sus marcos normativos específicos:
 
 ### ¿Qué hace un Embajador de LeFriApp?
 1. **Curaduría Normativa y Jurisdiccional:**

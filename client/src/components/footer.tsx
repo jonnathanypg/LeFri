@@ -8,30 +8,30 @@ export function Footer() {
 
   const labels = {
     es: {
-      brand: "LeFriApp • Fundación Underlife",
+      brand: "LeFri (Legal Friend) • Fundación Underlife",
       mission: "Plataforma cívica para el acceso a la justicia y alfabetización constitucional.",
       privacy: "Privacidad (LOPDP / RGPD)",
       terms: "Términos de Servicio",
       cookies: "Política de Cookies",
-      rights: "LeFriApp © 2026. Todos los derechos reservados.",
+      rights: "LeFri (Legal Friend) © 2026. Todos los derechos reservados.",
       security: "Privacidad blindada y cifrado TLS / AES-256",
     },
     en: {
-      brand: "LeFriApp • Fundación Underlife",
+      brand: "LeFri (Legal Friend) • Fundación Underlife",
       mission: "Civic platform for justice empowerment and constitutional literacy.",
       privacy: "Privacy Policy (LOPDP / GDPR)",
       terms: "Terms of Service",
       cookies: "Cookie Policy",
-      rights: "LeFriApp © 2026. All rights reserved.",
+      rights: "LeFri (Legal Friend) © 2026. All rights reserved.",
       security: "Hardened privacy & TLS / AES-256 encryption",
     },
     pt: {
-      brand: "LeFriApp • Fundación Underlife",
+      brand: "LeFri (Legal Friend) • Fundación Underlife",
       mission: "Plataforma cívica para acesso à justiça e conscientização constitucional.",
       privacy: "Privacidade (LOPDP / RGPD)",
       terms: "Termos de Serviço",
       cookies: "Política de Cookies",
-      rights: "LeFriApp © 2026. Todos os direitos reservados.",
+      rights: "LeFri (Legal Friend) © 2026. Todos os direitos reservados.",
       security: "Privacidade blindada e criptografia TLS / AES-256",
     }
   };

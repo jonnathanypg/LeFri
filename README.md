@@ -1,6 +1,7 @@
-# LeFriApp ⚖️🤖 — Plataforma Global de Orientación Legal y Justicia con IA
+# LeFri ⚖️🤝 — Legal Friend
+### *Plataforma Global de Orientación Legal, Derechos Ciudadanos y Justicia Temprana con IA*
 
-> **Democratizando el acceso universal a la justicia temprana, orientación legal y defensa de derechos ciudadanos.**  
+> **LeFri** *(diminutivo de **Legal Friend**)*: Democratizando el acceso universal a la justicia temprana, orientación legal empática y defensa de derechos humanos.  
 > Impulsado por Inteligencia Artificial Multi-Agente, integración constitucional internacional y canales omnicanal (Web, WhatsApp, Telegram, Voz).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -12,14 +13,14 @@
 
 ---
 
-## 🌟 Visión e Impacto
+## 🌟 Visión e Historia: El Nacimiento de "Legal Friend"
 
-Millones de personas en América Latina y el mundo enfrentan barreras insalvables para conocer y ejercer sus derechos fundamentales debido a costos exorbitantes, tecnicismos inaccesibles o falta de auxilio inmediato.
+El derecho y las leyes a menudo resultan intimidantes, costosos y redactados en un lenguaje técnico inaccesible. Cuando una persona sufre una vulneración de derechos, un despido intempestivo o una situación de violencia, lo primero que necesita no es un juicio costoso, sino un **"Legal Friend" (un amigo legal)**: alguien de confianza que escuche su caso con empatía, le explique qué dice la ley en palabras sencillas y le señale las rutas de acción posibles.
 
-**LeFriApp** nace como una plataforma **Open Source de impacto social** cuyo objetivo es romper estas barreras mediante:
+De esa visión nace **LeFri** *(Legal Friend)*, concebido como una plataforma **Open Source de impacto social** cuyo objetivo es romper estas barreras mediante:
 1. **Orientación Legal Gratuita e Instantánea:** Mediador ciudadano asistido por IA multi-agente con búsqueda de reformas en tiempo real (Tavily) y vector stores jurídicos (Pinecone RAG).
 2. **Contextualización Constitucional Multi-País:** Conexión nativa con **The Constitute Project API** para comparar artículos, tratados y constituciones de más de 20 naciones.
-3. **Botón de Emergencia y Triage Humanitario:** Mecanismo de auxilio ante despidos intempestivos, violencia de género o detenciones arbitrarias, ordenado por heaps de prioridad y colas offline.
+3. **Botón de Emergencia y Triage Humanitario:** Mecanismo de auxilio ante emergencias graves, ordenado por heaps de prioridad y sincronización offline.
 4. **Asistente de Voz y Accesibilidad Universal:** Reconocimiento de voz para ciudadanos con analfabetismo o dificultades de escritura.
 5. **Canales Omnicanal Integrados:** Acceso vía Web App, WhatsApp (Baileys) y Telegram Bot.
 
