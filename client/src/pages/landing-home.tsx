@@ -65,18 +65,6 @@ export default function LandingHome() {
               </button>
             </div>
 
-            {/* GitHub Open Source Link */}
-            <a 
-              href="https://github.com/jonnathanypg/LeFriApp" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="hidden sm:inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-200 hover:text-white transition"
-              title="GitHub Open Source Repository"
-            >
-              <Github className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Open Source</span>
-            </a>
-
             <Button 
               variant="default"
               size="sm"
@@ -984,12 +972,10 @@ export default function LandingHome() {
                   <span>Ver en GitHub</span>
                 </a>
                 <a
-                  href="https://github.com/jonnathanypg/LeFriApp/blob/main/CONTRIBUTING.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="mailto:jonnathan@fundacionunderlife.org?subject=%5BEMBAJADOR%20LEFRI%5D%20Propuesta%20de%20Adopci%C3%B3n%20por%20Pa%C3%ADs&body=Hola%20Jonnatan%2C%0A%0AMe%20interesa%20postularme%20como%20Embajador%20%2F%20Aliado%20de%20LeFri%20(Legal%20Friend)%20para%20mi%20pa%C3%ADs.%0A%0A-%20Pa%C3%ADs%20%2F%20Jurisdicci%C3%B3n%3A%20%0A-%20Profesi%C3%B3n%20u%20Organizaci%C3%B3n%3A%20%0A-%20Leyes%20o%20%C3%A1rea%20de%20inter%C3%A9s%20a%20incorporar%3A%20%0A-%20Tel%C3%A9fono%20%2F%20WhatsApp%20de%20contacto%3A%20%0A%0AGracias."
                   className="inline-flex items-center justify-center space-x-2 px-5 py-3 rounded-xl bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-teal-500/20 transition hover:scale-[1.02]"
                 >
-                  <Heart className="w-4 h-4" />
+                  <Heart className="w-4 h-4 fill-white/20" />
                   <span>Ser Embajador</span>
                 </a>
               </div>
