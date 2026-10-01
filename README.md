@@ -137,6 +137,23 @@ Por favor lee nuestro [CONTRIBUTING.md](CONTRIBUTING.md) para conocer las pautas
 
 ---
 
+## 👨‍💻 Autor y Creador Principal
+
+Este proyecto fue ideado, diseñado y desarrollado por:
+
+<div align="center">
+  <h3><b>Jonnatan Peña</b></h3>
+  <p><b>Lead Software Engineer & AI Systems Architect</b> · Ecuador 🇪🇨</p>
+  <p>
+    <a href="https://github.com/jonnathanypg">
+      <img src="https://img.shields.io/badge/GitHub-jonnathanypg-181717?style=flat&logo=github" alt="GitHub Profile" />
+    </a>
+  </p>
+  <p><i>Comprometido con el uso de la Inteligencia Artificial, el software de código abierto y la tecnología para democratizar el acceso a la justicia y los derechos humanos.</i></p>
+</div>
+
+---
+
 ## 📄 Licencia
 
 Este proyecto está liberado para el beneficio de la comunidad bajo la licencia **[MIT License](LICENSE)**.
@@ -144,6 +161,6 @@ Este proyecto está liberado para el beneficio de la comunidad bajo la licencia 
 ---
 
 <p align="center">
-  Hecho con ❤️ para la defensa de los derechos ciudadanos y la justicia social en todo el mundo.<br/>
+  <b>LeFri (Legal Friend)</b> · Hecho con ❤️ para la defensa de los derechos ciudadanos y la justicia social en todo el mundo.<br/>
   <b>Fundación Underlife & Weblifetech</b>
 </p>
