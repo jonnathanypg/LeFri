@@ -149,8 +149,16 @@ Este proyecto fue ideado, diseñado y desarrollado por:
   <h3><b>Jonnatan Peña</b></h3>
   <p><b>Lead Software Engineer & AI Systems Architect</b> · Ecuador 🇪🇨</p>
   <p>
-    <a href="https://github.com/jonnathanypg">
+    <a href="https://github.com/jonnathanypg" target="_blank">
       <img src="https://img.shields.io/badge/GitHub-jonnathanypg-181717?style=flat&logo=github" alt="GitHub Profile" />
+    </a>
+    &nbsp;
+    <a href="https://www.linkedin.com/in/jonnathanypg/" target="_blank">
+      <img src="https://img.shields.io/badge/LinkedIn-jonnathanypg-0A66C2?style=flat&logo=linkedin" alt="LinkedIn Profile" />
+    </a>
+    &nbsp;
+    <a href="mailto:jonnathan@fundacionunderlife.org">
+      <img src="https://img.shields.io/badge/Email-Contact%20Me-EA4335?style=flat&logo=gmail&logoColor=white" alt="Email Contact" />
     </a>
   </p>
   <p><i>Comprometido con el uso de la Inteligencia Artificial, el software de código abierto y la tecnología para democratizar el acceso a la justicia y los derechos humanos.</i></p>
