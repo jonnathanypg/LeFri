@@ -1,0 +1,48 @@
+name: 🌎 Country Ambassador & Legal Knowledge Proposal
+description: Propose legal knowledge integration, code adaptation, or apply as a Country Ambassador
+title: "[AMBASSADOR / COUNTRY EXPANSION] "
+labels: ["ambassador", "legal-knowledge", "expansion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Welcome to the LeFriApp Country Ambassador & Legal Expansion program!
+        We are connecting global legal professionals, universities, and developers to bring accessible rights and constitutional AI to every country.
+  - type: input
+    id: country
+    attributes:
+      label: Target Country & Jurisdiction
+      placeholder: e.g. Colombia, Peru, Mexico, Argentina, Spain...
+    validations:
+      required: true
+  - type: dropdown
+    id: role
+    attributes:
+      label: Your Profile / Contribution Type
+      options:
+        - Legal Professional / Lawyer / Judge
+        - University Law Clinic / NGO Representative
+        - Software Developer / AI Engineer
+        - Translator / Native Language Specialist
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Laws, Codes, or Institutional Connection
+      description: What legal framework or institutional partnership would you like to incorporate into LeFriApp?
+      placeholder: |
+        - Labor Code articles
+        - Criminal procedure emergency guidelines
+        - Partnership with local pro-bono university clinic
+    validations:
+      required: true
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Information
+      description: Email or LinkedIn where the maintainer team can reach you.
+      placeholder: contact@domain.com
+    validations:
+      required: true

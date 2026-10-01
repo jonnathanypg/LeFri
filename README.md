@@ -1,217 +1,148 @@
-# LeFri Platform
+# LeFriApp ⚖️🤖 — Plataforma Global de Orientación Legal y Justicia con IA
 
-A comprehensive legal platform that combines legal consultations, process management, and emergency alerts. Our mission is to democratize access to immediate and free legal advice, making legal assistance accessible to everyone.
+> **Democratizando el acceso universal a la justicia temprana, orientación legal y defensa de derechos ciudadanos.**  
+> Impulsado por Inteligencia Artificial Multi-Agente, integración constitucional internacional y canales omnicanal (Web, WhatsApp, Telegram, Voz).
 
-## 👨‍💻 Author
-- **Jonnatan Peña**
-- Location: Ecuador
-
-## 🎯 Purpose
-
-LeFri Platform was created with the vision of democratizing access to legal advice by providing:
-- Immediate legal consultations
-- Free initial legal guidance
-- Emergency legal assistance
-- Process management tools
-- Access to legal resources
-
-Our goal is to break down barriers to legal assistance and ensure that everyone has access to quality legal support when they need it most.
-
-## 🚀 Technologies
-
-- **Frontend**: React, TypeScript, TailwindCSS, Vite
-- **Backend**: Node.js, Express, TypeScript
-- **Database**: MongoDB
-- **Authentication**: Google OAuth 2.0
-- **Integrated APIs**: 
-  - Google Gemini AI
-  - WhatsApp Business API
-  - Email Services
-  - Voice Services
-- **Deployment**:
-  - Google Cloud Run
-  - Google Cloud Build
-  - Docker
-
-## 📦 Project Structure
-
-```
-LeFriPlatform/
-├── client/                 # React Frontend
-│   ├── src/
-│   │   ├── components/    # Reusable components
-│   │   ├── pages/        # Main pages
-│   │   ├── contexts/     # React contexts
-│   │   ├── hooks/        # Custom hooks
-│   │   └── types/        # TypeScript types
-├── server/                # Express Backend
-│   ├── config/           # Configurations
-│   ├── services/         # External services
-│   ├── storage/          # Persistence layer
-│   └── types/            # TypeScript types
-├── scripts/              # Deployment and setup scripts
-│   ├── deploy.sh         # Production deployment script
-│   ├── setup-env.sh      # Environment setup script
-│   ├── local-env.sh      # Local environment script
-│   └── setup-local-env.sh # Local environment setup
-└── shared/               # Shared code
-```
-
-## 🛠️ Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/dark-yx/LeFriPlatform.git
-cd LeFriPlatform
-```
-
-2. Install dependencies:
-```bash
-npm install
-```
-
-3. Configure environment variables:
-
-### Local Development
-
-1. Set up local environment:
-```bash
-# Export environment variables
-export MONGODB_URI="your_mongodb_uri"
-export GOOGLE_OAUTH_CLIENT_ID="your_google_client_id"
-export GOOGLE_OAUTH_CLIENT_SECRET="your_google_client_secret"
-export GOOGLE_OAUTH_REDIRECT_URI="http://localhost:5000/api/auth/google/callback"
-export GEMINI_API_KEY="your_gemini_api_key"
-
-# Or use the setup script
-./scripts/setup-local-env.sh
-```
-
-2. Start development server:
-```bash
-npm run dev
-```
-
-### Production Deployment
-
-1. Configure production environment:
-```bash
-./scripts/setup-env.sh
-```
-
-2. Deploy to Google Cloud Run:
-```bash
-./scripts/deploy.sh
-```
-
-## 🔧 Environment Variables
-
-### Required Variables
-- `MONGODB_URI`: MongoDB connection string
-- `GOOGLE_OAUTH_CLIENT_ID`: Google OAuth client ID
-- `GOOGLE_OAUTH_CLIENT_SECRET`: Google OAuth client secret
-- `GOOGLE_OAUTH_REDIRECT_URI`: OAuth redirect URI
-- `GEMINI_API_KEY`: Google Gemini AI API key
-
-### CI/CD Variables (GitLab)
-- `MONGODB_URI_BASE64`: Base64 encoded MongoDB URI
-- `GOOGLE_OAUTH_CLIENT_ID_BASE64`: Base64 encoded Google OAuth client ID
-- `GOOGLE_OAUTH_CLIENT_SECRET_BASE64`: Base64 encoded Google OAuth client secret
-- `GEMINI_API_KEY_BASE64`: Base64 encoded Gemini API key
-- `GOOGLE_OAUTH_REDIRECT_URI`: OAuth redirect URI
-
-## 🚀 Deployment
-
-### Local Development
-1. Configure local environment using `setup-local-env.sh`
-2. Start development server with `npm run dev`
-3. Access application at `http://localhost:5000`
-
-### Production Deployment
-1. Configure production environment using `setup-env.sh`
-2. Deploy to Google Cloud Run using `deploy.sh`
-3. Access application at the provided Cloud Run URL
-
-## 🔑 Authentication
-
-The application uses Google OAuth 2.0 for authentication. To ensure proper functionality:
-
-1. Make sure environment variables are correctly configured
-2. Verify redirect URI is set up in Google Cloud Console
-3. The client ID must be correctly configured in the environment variables
-
-## 🚨 Troubleshooting
-
-### Google Authentication Error
-
-If you encounter the "Invalid server response" error:
-
-1. Check the browser console logs (F12)
-2. Ensure the server is running on port 5000
-3. Verify environment variables are correctly configured
-4. Clear browser cache and localStorage data
-5. Restart the server
-
-### Common Issues
-
-1. **MongoDB Connection Error**:
-   - Verify MongoDB URI
-   - Ensure database is accessible
-
-2. **Authentication Error**:
-   - Verify Google OAuth credentials
-   - Ensure redirect URI is correctly configured
-
-3. **API Integration Issues**:
-   - Verify all API keys are correctly set
-   - Check API service status and quotas
-   - Ensure proper API permissions are granted
-
-4. **Deployment Issues**:
-   - Check Cloud Run logs for errors
-   - Verify environment variables in Cloud Run
-   - Ensure proper IAM permissions
-
-## 📝 Available Scripts
-
-- `npm run dev`: Start development server
-- `npm run build`: Build for production
-- `npm run start`: Start production server
-- `npm run check`: TypeScript type checking
-- `./scripts/setup-env.sh`: Configure production environment
-- `./scripts/deploy.sh`: Deploy to Google Cloud Run
-- `./scripts/setup-local-env.sh`: Configure local environment
-
-## 🔒 Security
-
-- Google OAuth 2.0 Authentication
-- Secure sessions with express-session
-- CSRF protection
-- Data validation with Zod
-- Input sanitization
-- API key protection
-- Environment variable security
-- Base64 encoding for sensitive data
-- Secure deployment with Google Cloud Run
-
-## 📄 License
-
-All rights reserved.
-
-This software and its documentation are the intellectual property of LeFriPlatform. The following are strictly prohibited:
-
-- Reproduction of all or part of the code
-- Distribution or commercialization of the software
-- Modification or creation of derivative works
-- Unauthorized use of any part of the intellectual property
-
-Any unauthorized use of this software constitutes copyright infringement and may result in legal action.
-
-## 🙏 Sponsored by
-
-- Underlife Foundation
-- Weblifetech
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Online-success.svg)](https://lefri.fundacionunderlife.org)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![GitHub Stars](https://img.shields.io/github/stars/jonnathanypg/LeFriApp?style=social)](https://github.com/jonnathanypg/LeFriApp)
+[![Supported by Weblifetech](https://img.shields.io/badge/Infrastructure%20by-Weblifetech-orange.svg)](https://weblifetech.com)
+[![Supported by Underlife](https://img.shields.io/badge/Sponsored%20by-Fundaci%C3%B3n%20Underlife-red.svg)](https://fundacionunderlife.org)
 
 ---
 
-Developed with ❤️ in Ecuador by Jonnatan Peña
+## 🌟 Visión e Impacto
+
+Millones de personas en América Latina y el mundo enfrentan barreras insalvables para conocer y ejercer sus derechos fundamentales debido a costos exorbitantes, tecnicismos inaccesibles o falta de auxilio inmediato.
+
+**LeFriApp** nace como una plataforma **Open Source de impacto social** cuyo objetivo es romper estas barreras mediante:
+1. **Orientación Legal Gratuita e Instantánea:** Mediador ciudadano asistido por IA multi-agente con búsqueda de reformas en tiempo real (Tavily) y vector stores jurídicos (Pinecone RAG).
+2. **Contextualización Constitucional Multi-País:** Conexión nativa con **The Constitute Project API** para comparar artículos, tratados y constituciones de más de 20 naciones.
+3. **Botón de Emergencia y Triage Humanitario:** Mecanismo de auxilio ante despidos intempestivos, violencia de género o detenciones arbitrarias, ordenado por heaps de prioridad y colas offline.
+4. **Asistente de Voz y Accesibilidad Universal:** Reconocimiento de voz para ciudadanos con analfabetismo o dificultades de escritura.
+5. **Canales Omnicanal Integrados:** Acceso vía Web App, WhatsApp (Baileys) y Telegram Bot.
+
+---
+
+## 🏛️ Respaldado y Financiado por la Comunidad
+
+El despliegue en producción, servidores, infraestructura de red y modelos de IA en línea están financiados y respaldados gracias al compromiso social de:
+
+- **[Fundación Underlife](https://fundacionunderlife.org):** Impulso a proyectos de derechos humanos, asistencia a comunidades vulnerables y acceso a la justicia.
+- **[Weblifetech](https://weblifetech.com):** Aportando infraestructura Cloud, servidores VPS de alto rendimiento, microservicios de voz/IA y observabilidad con Langfuse.
+- **Liderazgo del Proyecto:** Jonnatan Peña (Ecuador) junto a la comunidad de desarrolladores y juristas independientes.
+
+---
+
+## 🌎 Convocatoria Global: Programa de Embajadores por País
+
+Buscamos expandir **LeFriApp** a todas las naciones del mundo hispanohablante y global. Para lograrlo, abrimos el **Programa de Embajadores y Aliados Internacionales**:
+
+### ¿A quién buscamos?
+- **Abogados, Juristas y Estudiantes de Derecho** con vocación social.
+- **Universidades y Consultorios Jurídicos Gratuitos**.
+- **ONGs de Derechos Humanos y Colectivos de Víctimas**.
+- **Desarrolladores y Comunidades Tecnológicas Open Source**.
+
+### Rol del Embajador:
+- **Adaptación Normativa:** Alimentar los RAG y prompts de los agentes con los códigos y leyes vigentes de su jurisdicción.
+- **Vínculos de Apoyo:** Conectar a abogados pro-bono locales con ciudadanos cuyos casos requieran representación formal.
+- **Despliegues Locales:** Difundir la plataforma o coordinar instancias federadas del proyecto.
+
+> 🤝 **¿Te interesa ser Embajador en tu país?**  
+> Consulta nuestra guía en [CONTRIBUTING.md](CONTRIBUTING.md) o escríbenos directamente a **[lefri@fundacionunderlife.org](mailto:lefri@fundacionunderlife.org)** con el asunto `[EMBAJADOR LEFRIAPP] - [País]`.
+
+---
+
+## 🏗️ Arquitectura Técnica y Tecnologías
+
+El repositorio está construido bajo una arquitectura modular de alto rendimiento:
+
+- **Frontend:**
+  - [React 18](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) + [Vite](https://vitejs.dev/)
+  - [Tailwind CSS](https://tailwindcss.com/) + [Radix UI](https://www.radix-ui.com/) / [shadcn/ui](https://ui.shadcn.com/)
+  - [i18next](https://www.i18next.com/) (Español, Inglés, Portugués en expansión)
+  - TanStack React Query & Framer Motion
+- **Backend & Orquestación:**
+  - [Node.js](https://nodejs.org/) & [Express](https://expressjs.com/)
+  - [Prisma ORM](https://www.prisma.io/) sobre MariaDB / MySQL
+  - Multi-Agent Orchestrator: Coordinator, Legal Research, Process Planning, Document Generation, Citizen Mediator.
+  - LLM Provider Agnostic: OpenAI (GPT-4o), Google Gemini, Groq (Llama 3.3).
+  - Grounding en tiempo real con [Tavily Search API](https://tavily.com/).
+  - Base de datos vectorial con [Pinecone](https://www.pinecone.io/).
+  - Integración Constitucional con [The Constitute Project](https://www.constituteproject.org/).
+- **Omnicanalidad & Servicios:**
+  - WhatsApp Business Engine (Baileys Multi-File Auth).
+  - Bot de Telegram para alertas de emergencia y soporte.
+  - Speech-To-Text vía MediaSuite STT microservice.
+  - Observabilidad y trazabilidad de prompts con [Langfuse](https://langfuse.com/) y [LangSmith](https://smith.langchain.com/).
+
+---
+
+## 🚀 Despliegue y Puesta en Marcha Local
+
+### Prerrequisitos
+- Node.js >= 20.x
+- MariaDB o MySQL >= 8.0
+- npm o pnpm
+
+### Pasos de Instalación
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone https://github.com/jonnathanypg/LeFriApp.git
+   cd LeFriApp
+   ```
+
+2. **Instalar dependencias:**
+   ```bash
+   npm install
+   ```
+
+3. **Configurar el entorno:**
+   Copia el archivo de variables sanitizadas para la comunidad:
+   ```bash
+   cp .env.example .env
+   ```
+   Edita las credenciales básicas (`DATABASE_URL`, claves de IA como `OPENAI_API_KEY` o `GEMINI_API_KEY`).
+
+4. **Inicializar la base de datos:**
+   ```bash
+   npx prisma generate
+   npx prisma db push
+   ```
+
+5. **Iniciar en modo desarrollo:**
+   ```bash
+   npm run dev
+   ```
+   La aplicación estará disponible de inmediato en `http://localhost:8080`.
+
+---
+
+## 🔒 Privacidad, Ética y Responsabilidad Legal
+
+- **Carácter Informativo:** LeFriApp provee orientación general y educativa en derechos; nunca formula asesoría jurídica formal ni garantiza resultados en procesos judiciales.
+- **Minimización de Datos:** La plataforma no recolecta documentos sensibles como números de cuenta, cédulas o datos de menores de edad.
+- **Seguridad en Producción:** Sesiones protegidas por tokens cifrados (`express-session` con almacén MySQL), encabezados seguros y validación de tipos con Zod.
+
+---
+
+## 🤝 Cómo Contribuir
+
+¡Las contribuciones de desarrolladores, diseñadores, lingüistas y juristas son el corazón de LeFriApp!  
+Por favor lee nuestro [CONTRIBUTING.md](CONTRIBUTING.md) para conocer las pautas de estilo, cómo reportar issues o cómo enviar Pull Requests.
+
+---
+
+## 📄 Licencia
+
+Este proyecto está liberado para el beneficio de la comunidad bajo la licencia **[MIT License](LICENSE)**.
+
+---
+
+<p align="center">
+  Hecho con ❤️ para la defensa de los derechos ciudadanos y la justicia social en todo el mundo.<br/>
+  <b>Fundación Underlife & Weblifetech</b>
+</p>

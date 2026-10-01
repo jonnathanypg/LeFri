@@ -1,0 +1,49 @@
+name: 🐛 Bug Report
+description: Report a reproducible bug or unexpected behavior in LeFriApp
+title: "[BUG] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this issue! Together we make justice and legal AI more accessible and reliable.
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is.
+      placeholder: What went wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior.
+      placeholder: |
+        1. Go to '/consulta' or ask a query in WhatsApp
+        2. Enter query '...'
+        3. See error
+    validations:
+      required: true
+  - type: dropdown
+    id: jurisdiction
+    attributes:
+      label: Legal Jurisdiction / Country Affected (If applicable)
+      description: Is this issue related to a specific country's constitutional or legal logic?
+      options:
+        - None / General System Bug
+        - Ecuador (EC)
+        - Colombia (CO)
+        - Peru (PE)
+        - Mexico (MX)
+        - Argentina (AR)
+        - Chile (CL)
+        - Spain (ES)
+        - Other (specify in description)
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Info
+      description: Browser, Node version, OS, or channel (Web / WhatsApp / Telegram).
+      placeholder: Chrome 120, Node.js 20, Ubuntu 22.04
