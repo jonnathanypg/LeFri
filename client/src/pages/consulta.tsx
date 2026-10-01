@@ -64,7 +64,7 @@ export default function Consulta() {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">
                   {t.consultation || "Orientación Jurídica Inmediata"}
                 </h1>
-                <p className="text-xs text-slate-400">Triaje legal agéntico fundamentado en normas constitucionales</p>
+                <p className="text-xs text-slate-400">Orientación informativa fundamentada en normas — Esta orientación es informativa y no constituye asesoría jurídica ni garantiza un resultado legal.</p>
               </div>
             </div>
             
@@ -81,7 +81,7 @@ export default function Consulta() {
                   }`}
                 >
                   <Sparkles className="h-3.5 w-3.5" />
-                  <span>Wizard Guiado</span>
+                  <span>{(t as any)?.wizard?.guidedWizard || 'Wizard Guiado'}</span>
                 </button>
 
                 <button
@@ -94,7 +94,7 @@ export default function Consulta() {
                   }`}
                 >
                   <MessageSquare className="h-3.5 w-3.5" />
-                  <span>Chat Libre</span>
+                  <span>{(t as any)?.wizard?.freeChat || 'Chat Libre'}</span>
                 </button>
               </div>
 

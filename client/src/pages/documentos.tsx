@@ -726,14 +726,14 @@ export default function DocumentosPage() {
               <span>Conectar con Google Drive</span>
             </DialogTitle>
             <DialogDescription className="text-slate-300 text-xs leading-relaxed pt-2">
-              Para que LeFriApp pueda redactar y guardar el escrito íntegro directamente en tu cuenta de Google Docs (con todos sus artículos, considerandos y firmas sin que tengas que copiar y pegar a mano), Google requiere tu autorización de permisos.
+              Para que LeFri pueda redactar y guardar el escrito íntegro directamente en tu cuenta de Google Docs (con todos sus artículos, considerandos y firmas sin que tengas que copiar y pegar a mano), Google requiere tu autorización de permisos.
             </DialogDescription>
           </DialogHeader>
 
           <div className="p-3.5 bg-slate-950/80 rounded-xl border border-slate-800 text-xs text-slate-300 space-y-2.5">
             <div className="flex items-start space-x-2.5">
               <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-              <span><strong>Permiso seguro:</strong> Solo accede a los archivos creados con LeFriApp, nunca a tus otros documentos privados.</span>
+              <span><strong>Permiso seguro:</strong> Solo accede a los archivos creados con LeFri, nunca a tus otros documentos privados.</span>
             </div>
             <div className="flex items-start space-x-2.5">
               <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />

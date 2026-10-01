@@ -342,6 +342,26 @@ const translations: Record<string, any> = {
     profile: "Perfil",
     logout: "Sair",
 
+    // Auth
+    signIn: "Entrar",
+    signUp: "Cadastrar-se",
+    email: "E-mail",
+    password: "Senha",
+    confirmPassword: "Confirmar Senha",
+    fullName: "Nome Completo",
+    createAccount: "Criar Conta",
+    alreadyHaveAccount: "Já tem uma conta?",
+    dontHaveAccount: "Não tem uma conta?",
+    continueWithGoogle: "Continuar com o Google",
+    orContinueWith: "Ou continue com",
+    termsOfService: "Termos de Serviço",
+    privacyPolicy: "Política de Privacidade",
+    byCreating: "Ao continuar, você concorda com nossos",
+    and: "e",
+    signingIn: "Entrando...",
+    creatingAccount: "Criando conta...",
+    authenticating: "Autenticando...",
+
     // Dashboard
     welcomeTitle: "Bem-vindo ao LeFriAI",
     welcomeSubtitle: "Seu assistente jurídico inteligente",

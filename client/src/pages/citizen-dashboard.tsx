@@ -28,7 +28,7 @@ export default function CitizenDashboard() {
   const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string }>>([
     { 
       role: 'assistant', 
-      content: '¡Hola! Soy tu Agente Mediador Legal personal de LeFriApp. Estoy conectado a la jurisprudencia oficial y a tus canales de mensajería. ¿Qué consulta o situación jurídica deseas resolver hoy?' 
+      content: '¡Hola! Soy tu Agente Mediador Legal personal de LeFri. Estoy conectado a la jurisprudencia oficial y a tus canales de mensajería. ¿Qué consulta o situación jurídica deseas resolver hoy?' 
     }
   ]);
 

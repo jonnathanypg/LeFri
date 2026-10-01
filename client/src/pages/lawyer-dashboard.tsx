@@ -334,7 +334,7 @@ export default function LawyerDashboard() {
               <CardHeader className="border-b border-neutral-100">
                 <CardTitle>Embudo de Leads (Captación de Clientes)</CardTitle>
                 <CardDescription>
-                  Prospectos legales filtrados y pre-analizados por la red agéntica de LeFriApp.
+                  Prospectos legales filtrados y pre-analizados por la red agéntica de LeFri.
                 </CardDescription>
               </CardHeader>
               <CardContent className="p-0">
@@ -753,7 +753,7 @@ export default function LawyerDashboard() {
                   
                   <div className="bg-neutral-800 text-neutral-200 p-4 rounded-xl font-mono text-xs overflow-x-auto border border-neutral-700 shadow-inner">
                     <code>
-                      {`<!-- LeFriApp AI Legal Assistant Widget -->
+                      {`<!-- LeFri AI Legal Assistant Widget -->
 <script 
   src="${window.location.origin}/widget.js" 
   data-firm-id="${metrics?.firmName ? metrics.firmName.replace(/\s+/g, '-').toLowerCase() : 'demo'}"
@@ -782,7 +782,7 @@ export default function LawyerDashboard() {
                   <span>Configuración del Plan y Cupo ProBono</span>
                 </CardTitle>
                 <CardDescription>
-                  Administra las políticas de tu bufete dentro de la red LeFriApp.
+                  Administra las políticas de tu bufete dentro de la red LeFri.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -800,7 +800,7 @@ export default function LawyerDashboard() {
                     <div className="p-4 border border-indigo-100 bg-neutral-50 rounded-xl space-y-4">
                       <h4 className="text-xs font-bold text-neutral-700 tracking-wide uppercase">Upgrade your Firm to Premium</h4>
                       <p className="text-xs text-neutral-500">
-                        Habilita la integración de WhatsApp Corporativo y aumenta tu visibilidad y leads en el CRM de LeFriApp.
+                        Habilita la integración de WhatsApp Corporativo y aumenta tu visibilidad y leads en el CRM de LeFri.
                       </p>
                       <div className="grid grid-cols-2 gap-4">
                         <div className="p-3 border bg-white rounded-lg flex flex-col justify-between">

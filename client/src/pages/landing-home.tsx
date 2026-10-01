@@ -77,69 +77,74 @@ export default function LandingHome() {
         </div>
       </header>
 
-      {/* ─── Hero Section ─────────────────────────────────────────── */}
-      <section className="relative overflow-hidden pt-12 pb-20 sm:pt-20 sm:pb-28 border-b border-slate-800/60">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-indigo-600/15 blur-[130px] rounded-full pointer-events-none" />
+      {/* ─── Hero Section (Above the Fold / Impactful Design) ─────── */}
+      <section className="relative overflow-hidden pt-8 pb-14 sm:pt-14 sm:pb-20 border-b border-slate-800/60">
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[360px] bg-gradient-to-tr from-indigo-600/20 via-sky-500/15 to-teal-500/20 blur-[130px] rounded-full pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/25 text-indigo-300 text-xs font-semibold tracking-wide mb-6 uppercase">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          {/* Eyebrow Pill */}
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-[11px] sm:text-xs font-semibold tracking-wide mb-5 uppercase shadow-sm shadow-indigo-500/10">
+            <Sparkles className="w-3.5 h-3.5 text-indigo-400 animate-pulse" />
             <span>{t.heroBadge}</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-tight mb-6">
-            {t.heroTitle1} <br />
+          {/* Main H1 Headline with LeFri • Legal Friend */}
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white max-w-4xl mx-auto leading-tight mb-4">
+            <span className="inline-block bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent mr-2">
+              LeFri
+            </span>
+            <span className="text-teal-400 font-extrabold mr-2">·</span>
             <span className="bg-gradient-to-r from-teal-300 via-sky-300 to-indigo-300 bg-clip-text text-transparent">
-              {t.heroTitle2}
+              Legal Friend
+            </span>
+            <span className="block text-2xl sm:text-4xl lg:text-4xl font-extrabold text-slate-100 mt-2">
+              {t.heroTitle1} {t.heroTitle2}
             </span>
           </h1>
 
-          <p className="text-slate-200 text-base sm:text-lg lg:text-xl max-w-3xl mx-auto leading-relaxed mb-6 font-medium">
+          {/* Concise, punchy subtitle */}
+          <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed mb-8 font-normal">
             {t.heroSubtitle}
           </p>
 
-          <p className="text-slate-300 text-sm sm:text-base max-w-3xl mx-auto leading-relaxed mb-10">
-            {t.heroText1} <br className="hidden sm:inline" />
-            <strong className="text-white font-semibold">{t.heroText2}</strong>
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto">
+          {/* Action CTAs */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 max-w-md mx-auto mb-12">
             <Button
               size="lg"
               onClick={() => setLocation('/consulta')}
-              className="w-full sm:w-auto bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-white font-semibold px-8 py-6 rounded-xl shadow-lg shadow-teal-500/25 flex items-center justify-center space-x-2 text-base transition-all hover:scale-[1.02]"
+              className="w-full sm:w-auto bg-gradient-to-r from-teal-500 to-indigo-600 hover:from-teal-400 hover:to-indigo-500 text-white font-bold px-7 py-5 rounded-xl shadow-lg shadow-teal-500/20 flex items-center justify-center space-x-2 text-base transition-all hover:scale-[1.02]"
             >
               <span>{t.btnKnowRights}</span>
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4 ml-1" />
             </Button>
             <Button
               variant="outline"
               size="lg"
               onClick={() => setLocation('/constitucion')}
-              className="w-full sm:w-auto border-slate-700 bg-slate-900/80 hover:bg-slate-800 text-slate-100 hover:text-white font-medium px-6 py-6 rounded-xl text-base flex items-center justify-center space-x-2 shadow-sm"
+              className="w-full sm:w-auto border-slate-700 bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white font-medium px-6 py-5 rounded-xl text-base flex items-center justify-center space-x-2 shadow-sm"
             >
               <BookOpen className="w-4 h-4 text-teal-400" />
               <span>{t.btnExploreConstitution}</span>
             </Button>
           </div>
 
-          {/* Social Proof & Metrics */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 pt-10 border-t border-slate-800/80 max-w-5xl mx-auto text-left">
-            <div className="bg-slate-900/60 p-5 rounded-xl border border-slate-800">
-              <div className="text-2xl sm:text-3xl font-bold text-teal-400 font-mono">{t.stats.articlesVal}</div>
-              <div className="text-xs sm:text-sm text-slate-300 font-medium mt-1">{t.stats.articlesLbl}</div>
+          {/* Social Proof & Metrics (Clean, compact 1-row on tablet/desktop) */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-w-4xl mx-auto text-left pt-6 border-t border-slate-800/80">
+            <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 backdrop-blur-sm">
+              <div className="text-xl sm:text-2xl font-bold text-teal-400 font-mono">{t.stats.articlesVal}</div>
+              <div className="text-[11px] sm:text-xs text-slate-300 font-medium mt-0.5">{t.stats.articlesLbl}</div>
             </div>
-            <div className="bg-slate-900/60 p-5 rounded-xl border border-slate-800">
-              <div className="text-2xl sm:text-3xl font-bold text-indigo-400 font-mono">{t.stats.plainVal}</div>
-              <div className="text-xs sm:text-sm text-slate-300 font-medium mt-1">{t.stats.plainLbl}</div>
+            <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 backdrop-blur-sm">
+              <div className="text-xl sm:text-2xl font-bold text-indigo-400 font-mono">{t.stats.plainVal}</div>
+              <div className="text-[11px] sm:text-xs text-slate-300 font-medium mt-0.5">{t.stats.plainLbl}</div>
             </div>
-            <div className="bg-slate-900/60 p-5 rounded-xl border border-slate-800">
-              <div className="text-2xl sm:text-3xl font-bold text-emerald-400 font-mono">{t.stats.freeVal}</div>
-              <div className="text-xs sm:text-sm text-slate-300 font-medium mt-1">{t.stats.freeLbl}</div>
+            <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 backdrop-blur-sm">
+              <div className="text-xl sm:text-2xl font-bold text-emerald-400 font-mono">{t.stats.freeVal}</div>
+              <div className="text-[11px] sm:text-xs text-slate-300 font-medium mt-0.5">{t.stats.freeLbl}</div>
             </div>
-            <div className="bg-slate-900/60 p-5 rounded-xl border border-slate-800">
-              <div className="text-2xl sm:text-3xl font-bold text-sky-400 font-mono">{t.stats.stepVal}</div>
-              <div className="text-xs sm:text-sm text-slate-300 font-medium mt-1">{t.stats.stepLbl}</div>
+            <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800/80 backdrop-blur-sm">
+              <div className="text-xl sm:text-2xl font-bold text-sky-400 font-mono">{t.stats.stepVal}</div>
+              <div className="text-[11px] sm:text-xs text-slate-300 font-medium mt-0.5">{t.stats.stepLbl}</div>
             </div>
           </div>
         </div>
@@ -188,7 +193,7 @@ export default function LandingHome() {
         </div>
       </section>
 
-      {/* ─── ¿Cómo te ayuda LeFriApp? (Cards Homogéneas con CTAs Uniformes) ─ */}
+      {/* ─── ¿Cómo te ayuda LeFri? (Cards Homogéneas con CTAs Uniformes) ─ */}
       <section className="py-20 bg-slate-900/30 border-b border-slate-800/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -658,7 +663,7 @@ export default function LandingHome() {
         </div>
       </section>
 
-      {/* ─── Para quién es LeFriApp ───────────────────────────────── */}
+      {/* ─── Para quién es LeFri ───────────────────────────────── */}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-b border-slate-800/60">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">

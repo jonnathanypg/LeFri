@@ -22,15 +22,16 @@ export default function Login() {
   const { language, setLanguage } = useLanguage();
   const t = useTranslations(language);
 
-  // Check URL query params (e.g. ?mode=register or ?ui=classic)
+  // Check URL query params (e.g. ?mode=register, ?mode=collaborate, ?mode=support or ?ui=classic)
   const [isConversational, setIsConversational] = useState(true);
-  const [initialMode, setInitialMode] = useState<'login' | 'register'>('login');
+  const [initialMode, setInitialMode] = useState<'login' | 'register' | 'collaborate' | 'support'>('login');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
-      if (params.get('mode') === 'register') {
-        setInitialMode('register');
+      const queryMode = params.get('mode');
+      if (queryMode === 'register' || queryMode === 'collaborate' || queryMode === 'support') {
+        setInitialMode(queryMode);
       }
       if (params.get('ui') === 'classic') {
         setIsConversational(false);
@@ -166,8 +167,8 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
-      {/* Top Navbar */}
-      <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur px-4 sm:px-8 py-3 flex items-center justify-between z-30">
+      {/* Top Navbar - Sticky & Consistent with Home */}
+      <header className="border-b border-slate-800/80 bg-slate-950/90 backdrop-blur sticky top-0 z-50 px-4 sm:px-8 py-3 flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Button 
             variant="ghost" 
@@ -175,14 +176,16 @@ export default function Login() {
             onClick={() => setLocation('/')}
             className="text-slate-400 hover:text-white text-xs flex items-center space-x-1 pl-1"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Volver a la Home</span>
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            <span>{language === 'en' ? 'Back to Home' : language === 'pt' ? 'Voltar para o Início' : 'Volver a la Home'}</span>
           </Button>
           <span className="text-slate-700 hidden sm:inline">|</span>
           <div className="hidden sm:flex items-center space-x-2">
-            <Scale className="w-4 h-4 text-indigo-400" />
-            <span className="text-xs font-bold text-slate-300">LeFriApp</span>
-            <span className="text-[10px] text-slate-500 font-mono">fundacionunderlife.org</span>
+            <div className="w-7 h-7 rounded-md bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-center text-indigo-400">
+              <Scale className="w-4 h-4" />
+            </div>
+            <span className="text-sm font-bold text-slate-100">LeFri</span>
+            <span className="text-[10px] text-slate-400 font-mono hidden md:inline">fundacionunderlife.org</span>
           </div>
         </div>
 
@@ -194,21 +197,35 @@ export default function Login() {
             onClick={() => setIsConversational(!isConversational)}
             className="text-xs border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800 h-8"
           >
-            {isConversational ? 'Form Clásico' : 'Experiencia Guiada'}
+            {isConversational 
+              ? (language === 'en' ? 'Classic Form' : language === 'pt' ? 'Formulário Clássico' : 'Form Clásico')
+              : (language === 'en' ? 'Guided Flow' : language === 'pt' ? 'Experiência Guiada' : 'Experiencia Guiada')}
           </Button>
 
-          {/* Language Selector */}
-          <Select value={language} onValueChange={(val: any) => setLanguage(val)}>
-            <SelectTrigger className="w-24 bg-slate-900 border-slate-700 text-slate-200 text-xs h-8">
-              <Globe className="w-3.5 h-3.5 mr-1 text-slate-400" />
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="bg-slate-900 border-slate-700 text-slate-200">
-              <SelectItem value="es">ES</SelectItem>
-              <SelectItem value="en">EN</SelectItem>
-              <SelectItem value="pt">PT</SelectItem>
-            </SelectContent>
-          </Select>
+          {/* Language Switcher Buttons matching Home */}
+          <div className="flex items-center bg-slate-900 border border-slate-800 rounded-lg p-0.5 text-xs">
+            <button 
+              type="button"
+              onClick={() => setLanguage('es')}
+              className={`px-2 py-0.5 rounded transition-all font-semibold ${language === 'es' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+            >
+              ES
+            </button>
+            <button 
+              type="button"
+              onClick={() => setLanguage('en')}
+              className={`px-2 py-0.5 rounded transition-all font-semibold ${language === 'en' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+            >
+              EN
+            </button>
+            <button 
+              type="button"
+              onClick={() => setLanguage('pt')}
+              className={`px-2 py-0.5 rounded transition-all font-semibold ${language === 'pt' ? 'bg-indigo-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+            >
+              PT
+            </button>
+          </div>
         </div>
       </header>
 
@@ -225,7 +242,7 @@ export default function Login() {
               <div className="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg shadow-indigo-600/30">
                 <Scale className="w-7 h-7 text-white" />
               </div>
-              <CardTitle className="text-2xl font-bold text-white tracking-tight">LeFriApp</CardTitle>
+              <CardTitle className="text-2xl font-bold text-white tracking-tight">LeFri</CardTitle>
               <p className="text-xs text-slate-400 font-mono">lefri.fundacionunderlife.org</p>
               <p className="text-sm text-slate-300 mt-2">{t.welcomeSubtitle}</p>
             </CardHeader>

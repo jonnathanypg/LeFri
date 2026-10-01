@@ -26,9 +26,9 @@ export default function PublicChat() {
   const [activeCitations, setActiveCitations] = useState<Array<{ title: string; source?: string }>>([]);
 
   const [messages, setMessages] = useState<Array<{ role: 'user' | 'assistant'; content: string; citations?: any[] }>>([
-    { 
-      role: 'assistant', 
-      content: '¡Hola! Soy tu **Asistente Legal de Emergencia y Triaje** en LeFriApp. Brindo orientación jurídica inicial gratuita y fundamentada en ley para ciudadanos.\n\n¿Qué duda o situación legal tienes hoy? Puedes consultar sobre temas laborales, familiares, penales o contractuales.' 
+    {
+      role: 'assistant',
+      content: '¡Hola! Soy tu **asistente de orientación informativa** en LeFri. Te muestro normas que podrían estar relacionadas y posibles rutas de acción.\n\n¿Qué duda o situación tienes hoy? Esta orientación es informativa y no constituye asesoría jurídica ni garantiza un resultado legal.'
     }
   ]);
 
@@ -148,7 +148,7 @@ export default function PublicChat() {
             </div>
             <div>
               <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">
-                LeFriApp
+                LeFri
               </span>
               <span className="ml-2 text-xs uppercase tracking-widest px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
                 Público & Gratuito
@@ -188,6 +188,9 @@ export default function PublicChat() {
 
       {/* Main Chat Content */}
       <main className="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-4">
+        <div className="p-3 rounded-xl border border-amber-500/30 bg-amber-500/10 text-[11px] text-amber-100">
+          Protección de datos y límites: comparte solo lo mínimo necesario. No incluyas cédula, dirección exacta ni menores. Esta orientación es informativa y no constituye asesoría jurídica ni garantiza un resultado legal. Si hay urgencia o plazos, busca derivación profesional. Puedes pedir eliminar tu consulta.
+        </div>
         {/* Banner Quick Triage */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
           <button 
@@ -241,12 +244,12 @@ export default function PublicChat() {
 
         {/* Chat Box Container */}
         <Card className="flex-1 flex flex-col border-slate-800/80 bg-slate-900/40 backdrop-blur-xl shadow-2xl rounded-2xl overflow-hidden min-h-[550px]">
-          {/* Active Citations Bar */}
+          {/* Active Citations Bar — referencias informativas */}
           {activeCitations.length > 0 && (
             <div className="bg-indigo-950/40 border-b border-indigo-500/20 px-4 py-2 flex items-center gap-2 overflow-x-auto text-xs">
               <span className="text-indigo-400 font-medium flex items-center flex-shrink-0">
                 <Sparkles className="w-3.5 h-3.5 mr-1" />
-                Fuentes Jurídicas:
+                Estas normas podrían estar relacionadas:
               </span>
               {activeCitations.map((c, i) => (
                 <Badge key={i} variant="outline" className="bg-slate-900/80 border-indigo-500/30 text-slate-300 text-[11px] whitespace-nowrap">
