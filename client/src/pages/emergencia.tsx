@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, Plus, Edit, Trash2, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Plus, Edit, Trash2, MessageSquare, Lock, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
@@ -115,7 +115,7 @@ export default function Emergencia() {
     { value: 'other', label: t.relationshipOther },
   ];
 
-  return (
+return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       <Navbar />
       
@@ -134,163 +134,190 @@ export default function Emergencia() {
             <h1 className="text-2xl font-bold bg-gradient-to-r from-white via-slate-200 to-red-300 bg-clip-text text-transparent">{t.emergencyTitle}</h1>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Emergency Button */}
-            <EmergencyButton />
+          {/* Original Emergency Content - with Coming Soon Overlay */}
+          <div className="relative">
+            {/* Original Design - Exactly as before */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Emergency Button */}
+              <EmergencyButton />
 
-            {/* Emergency Contacts */}
-            <Card className="bg-slate-900 border-slate-800 text-slate-100 shadow-xl">
-              <CardHeader>
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-xl">{t.emergencyContacts}</CardTitle>
-                  <Dialog open={isAddingContact} onOpenChange={setIsAddingContact}>
-                    <DialogTrigger asChild>
-                      <Button className="bg-blue-500 hover:bg-blue-600">
-                        <Plus className="w-4 h-4 mr-2" />
-                        {t.addContact}
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>{t.addContact}</DialogTitle>
-                      </DialogHeader>
-                      
-                      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                        <div>
-                          <Label htmlFor="name">{t.contactName}</Label>
-                          <Input
-                            id="name"
-                            placeholder={t.contactName}
-                            {...register('name')}
-                          />
-                          {errors.name && (
-                            <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
-                          )}
-                        </div>
+              {/* Emergency Contacts */}
+              <Card className="bg-slate-900 border-slate-800 text-slate-100 shadow-xl">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-xl">{t.emergencyContacts}</CardTitle>
+                    <Dialog open={isAddingContact} onOpenChange={setIsAddingContact}>
+                      <DialogTrigger asChild>
+                        <Button className="bg-blue-500 hover:bg-blue-600">
+                          <Plus className="w-4 h-4 mr-2" />
+                          {t.addContact}
+                        </Button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle>{t.addContact}</DialogTitle>
+                        </DialogHeader>
                         
-                        <div>
-                          <Label htmlFor="phone">{t.phoneNumber}</Label>
-                          <Input
-                            id="phone"
-                            type="tel"
-                            placeholder={t.phoneNumber}
-                            {...register('phone')}
-                          />
-                          {errors.phone && (
-                            <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
-                          )}
-                        </div>
-                        
-                        <div>
-                          <Label htmlFor="relationship">{t.relationship}</Label>
-                          <Select onValueChange={(value) => setValue('relationship', value)}>
-                            <SelectTrigger>
-                              <SelectValue placeholder={t.relationship} />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {relationships.map((rel) => (
-                                <SelectItem key={rel.value} value={rel.value}>
-                                  {rel.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          {errors.relationship && (
-                            <p className="text-red-500 text-sm mt-1">{errors.relationship.message}</p>
-                          )}
-                        </div>
-                        
-                        <div className="flex items-center space-x-2">
-                          <Switch
-                            id="whatsapp"
-                            checked={watch('whatsappEnabled')}
-                            onCheckedChange={(checked) => setValue('whatsappEnabled', checked)}
-                          />
-                          <Label htmlFor="whatsapp" className="text-sm">
-                            {t.notifyViaWhatsApp}
-                          </Label>
-                        </div>
-                        
-                        <div className="flex justify-end space-x-3 pt-4">
-                          <Button 
-                            type="button" 
-                            variant="outline"
-                            onClick={() => setIsAddingContact(false)}
-                          >
-                            {t.cancel}
-                          </Button>
-                          <Button 
-                            type="submit" 
-                            className="bg-blue-500 hover:bg-blue-600"
-                            disabled={addContactMutation.isPending}
-                          >
-                            {addContactMutation.isPending ? t.saving : t.save}
-                          </Button>
-                        </div>
-                      </form>
-                    </DialogContent>
-                  </Dialog>
-                </div>
-              </CardHeader>
-              
-              <CardContent>
-                <div className="space-y-3">
-                  {emergencyContacts?.length > 0 ? (
-                    emergencyContacts.map((contact: any, index: number) => (
-                      <div key={contact._id || contact.id || `contact-${index}`} className="flex items-center justify-between p-3 bg-slate-950/80 border border-slate-800 rounded-xl">
-                        <div className="flex items-center space-x-3">
-                          <Avatar className="w-8 h-8">
-                            <AvatarFallback className={`${getAvatarColor(index)} text-white text-xs font-medium`}>
-                              {getInitials(contact.name)}
-                            </AvatarFallback>
-                          </Avatar>
+                        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                           <div>
-                            <p className="font-medium text-slate-100">{contact.name}</p>
-                            <p className="text-xs text-slate-400">
-                              {relationships.find(r => r.value === contact.relationship)?.label || contact.relationship} • {contact.phone}
-                            </p>
+                            <Label htmlFor="name">{t.contactName}</Label>
+                            <Input
+                              id="name"
+                              placeholder={t.contactName}
+                              {...register('name')}
+                            />
+                            {errors.name && (
+                              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+                            )}
+                          </div>
+                          
+                          <div>
+                            <Label htmlFor="phone">{t.phoneNumber}</Label>
+                            <Input
+                              id="phone"
+                              type="tel"
+                              placeholder={t.phoneNumber}
+                              {...register('phone')}
+                            />
+                            {errors.phone && (
+                              <p className="text-red-500 text-sm mt-1">{errors.phone.message}</p>
+                            )}
+                          </div>
+                          
+                          <div>
+                            <Label htmlFor="relationship">{t.relationship}</Label>
+                            <Select onValueChange={(value) => setValue('relationship', value)}>
+                              <SelectTrigger>
+                                <SelectValue placeholder={t.relationship} />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {relationships.map((rel) => (
+                                  <SelectItem key={rel.value} value={rel.value}>
+                                    {rel.label}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            {errors.relationship && (
+                              <p className="text-red-500 text-sm mt-1">{errors.relationship.message}</p>
+                            )}
+                          </div>
+                          
+                          <div className="flex items-center space-x-2">
+                            <Switch
+                              id="whatsapp"
+                              checked={watch('whatsappEnabled')}
+                              onCheckedChange={(checked) => setValue('whatsappEnabled', checked)}
+                            />
+                            <Label htmlFor="whatsapp" className="text-sm">
+                              {t.notifyViaWhatsApp}
+                            </Label>
+                          </div>
+                          
+                          <div className="flex justify-end space-x-3 pt-4">
+                            <Button 
+                              type="button" 
+                              variant="outline"
+                              onClick={() => setIsAddingContact(false)}
+                            >
+                              {t.cancel}
+                            </Button>
+                            <Button 
+                              type="submit" 
+                              className="bg-blue-500 hover:bg-blue-600"
+                              disabled={addContactMutation.isPending}
+                            >
+                              {addContactMutation.isPending ? t.saving : t.save}
+                            </Button>
+                          </div>
+                        </form>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
+                </CardHeader>
+                
+                <CardContent>
+                  <div className="space-y-3">
+                    {emergencyContacts?.length > 0 ? (
+                      emergencyContacts.map((contact: any, index: number) => (
+                        <div key={contact._id || contact.id || `contact-${index}`} className="flex items-center justify-between p-3 bg-slate-950/80 border border-slate-800 rounded-xl">
+                          <div className="flex items-center space-x-3">
+                            <Avatar className="w-8 h-8">
+                              <AvatarFallback className={`${getAvatarColor(index)} text-white text-xs font-medium`}>
+                                {getInitials(contact.name)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="font-medium text-slate-100">{contact.name}</p>
+                              <p className="text-xs text-slate-400">
+                                {relationships.find(r => r.value === contact.relationship)?.label || contact.relationship} • {contact.phone}
+                              </p>
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center space-x-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => setEditingContact(contact)}
+                              className="text-neutral-600 hover:text-neutral-900"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteContact(contact._id || contact.id)}
+                              className="text-red-600 hover:text-red-700"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
                           </div>
                         </div>
-                        
-                        <div className="flex items-center space-x-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => setEditingContact(contact)}
-                            className="text-neutral-600 hover:text-neutral-900"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteContact(contact._id || contact.id)}
-                            className="text-red-600 hover:text-red-700"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-8 text-neutral-500">
+                        <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                        <p className="text-sm">{t.noContacts}</p>
+                        <p className="text-xs">{t.addContact}</p>
                       </div>
-                    ))
-                  ) : (
-                    <div className="text-center py-8 text-neutral-500">
-                      <MessageSquare className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                      <p className="text-sm">{t.noContacts}</p>
-                      <p className="text-xs">{t.addContact}</p>
-                    </div>
+                    )}
+                  </div>
+                  
+                  {emergencyContacts?.length > 0 && (
+                    <Alert className="mt-4 border-orange-200 bg-orange-50">
+                      <MessageSquare className="w-4 h-4 text-orange-600" />
+                      <AlertDescription className="text-orange-700">
+                        {t.notifyViaWhatsApp}
+                      </AlertDescription>
+                    </Alert>
                   )}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Coming Soon Overlay - Semi-transparent layer on top */}
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm rounded-xl flex items-center justify-center z-50 pointer-events-none">
+              <div className="text-center p-8 max-w-md mx-4">
+                <div className="p-4 rounded-full bg-red-500/20 border border-red-500/30 inline-flex mb-4">
+                  <Lock className="w-12 h-12 text-red-300" />
                 </div>
-                
-                {emergencyContacts?.length > 0 && (
-                  <Alert className="mt-4 border-orange-200 bg-orange-50">
-                    <MessageSquare className="w-4 h-4 text-orange-600" />
-                    <AlertDescription className="text-orange-700">
-                      {t.notifyViaWhatsApp}
-                    </AlertDescription>
-                  </Alert>
-                )}
-              </CardContent>
-            </Card>
+                <h2 className="text-2xl font-bold text-white mb-2 bg-gradient-to-r from-red-300 via-white to-slate-300 bg-clip-text text-transparent">
+                  {t.comingSoon || 'Próximamente'}
+                </h2>
+                <p className="text-slate-300 text-lg">
+                  {t.comingSoonDescription || 'Esta funcionalidad está en desarrollo y estará disponible próximamente'}
+                </p>
+                <div className="mt-6 flex items-center justify-center space-x-2">
+                  <div className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
+                  <div className="w-2 h-2 rounded-full bg-red-400 animate-pulse" style={{animationDelay: '150ms'}} />
+                  <div className="w-2 h-2 rounded-full bg-red-400 animate-pulse" style={{animationDelay: '300ms'}} />
+                </div>
+                <p className="text-xs text-slate-500 mt-4">
+                  Funcionalidad bloqueada - No configurable aún
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </main>

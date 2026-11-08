@@ -65,7 +65,7 @@ export function Footer() {
 
           <div className="flex items-center space-x-4">
             <a 
-              href="https://github.com/jonnathanypg/LeFriApp" 
+              href="https://github.com/jonnathanypg/lefri" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-1.5 text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-800 transition"
@@ -74,7 +74,7 @@ export function Footer() {
               <span>{t.contribute}</span>
             </a>
             <a 
-              href="https://github.com/jonnathanypg/LeFriApp/blob/main/CONTRIBUTING.md" 
+              href="https://github.com/jonnathanypg/lefri/blob/main/CONTRIBUTING.md" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-1 text-teal-400 hover:text-teal-300 transition"

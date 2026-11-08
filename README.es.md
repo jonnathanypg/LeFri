@@ -17,6 +17,22 @@
 
 ---
 
+
+
+---
+
+## 🏛️ Compendio Maestro y Documentación Centralizada
+
+La documentación completa de arquitectura, modelos de base de datos, agentes jurídicos, esquemas de cifrado y auditorías ha sido estructurada y unificada:
+
+- 📘 **Compendio Maestro Canónico:** [LEFRI_MASTER.md](file:///root/lefri/LEFRI_MASTER.md) *(visión integral, multi-agente jurídico, cifrado AES/SHA-256 de PII, Express, React, WebSockets y WhatsApp Gateway)*.
+- 🤖 **Reglas para Agentes de IA:** [AGENTS.md](file:///root/lefri/AGENTS.md) *(persona del agente legal empático, seguridad de datos y reglas de desarrollo)*.
+- 📝 **Memoria Compartida y Reglas de Desarrollo:** [GEMINI.md](file:///root/lefri/GEMINI.md) *(fuente de verdad para IA, adaptadores de modelos y comandos de producción)*.
+- 🛠️ **Manual Operativo de Comandos:** [CLAUDE.md](file:///root/lefri/CLAUDE.md) *(comandos de compilación, linters y servicios PM2)*.
+- 📁 **Biblioteca Técnica Modular:** [docs/](file:///root/lefri/docs/) *(manuales especializados de auditoría, documentación técnica, guía de estilo y protocolo IAGS)*.
+
+---
+
 ## 🌟 Visión e Historia: El Nacimiento de "Legal Friend"
 
 El derecho y las leyes a menudo resultan intimidantes, costosos y redactados en un lenguaje técnico inaccesible. Cuando una persona sufre una vulneración de derechos, un despido intempestivo o una situación de violencia, lo primero que necesita no es un juicio costoso, sino un **"Legal Friend" (un amigo legal)**: alguien de confianza que escuche su caso con empatía, le explique qué dice la ley en palabras sencillas y le señale las rutas de acción posibles.

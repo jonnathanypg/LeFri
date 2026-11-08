@@ -11,9 +11,25 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Online-success.svg)](https://lefri.fundacionunderlife.org)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
-[![GitHub Stars](https://img.shields.io/github/stars/jonnathanypg/LeFriApp?style=social)](https://github.com/jonnathanypg/LeFriApp)
+[![GitHub Stars](https://img.shields.io/github/stars/jonnathanypg/lefri?style=social)](https://github.com/jonnathanypg/lefri)
 [![Supported by Weblifetech](https://img.shields.io/badge/Infrastructure%20by-Weblifetech-orange.svg)](https://weblifetech.com)
 [![Supported by Underlife](https://img.shields.io/badge/Sponsored%20by-Fundaci%C3%B3n%20Underlife-red.svg)](https://fundacionunderlife.org)
+
+---
+
+
+
+---
+
+## 🏛️ Compendio Maestro y Documentación Centralizada
+
+La documentación completa de arquitectura, modelos de base de datos, agentes jurídicos, esquemas de cifrado y auditorías ha sido estructurada y unificada:
+
+- 📘 **Compendio Maestro Canónico:** [LEFRI_MASTER.md](file:///root/lefri/LEFRI_MASTER.md) *(visión integral, multi-agente jurídico, cifrado AES/SHA-256 de PII, Express, React, WebSockets y WhatsApp Gateway)*.
+- 🤖 **Reglas para Agentes de IA:** [AGENTS.md](file:///root/lefri/AGENTS.md) *(persona del agente legal empático, seguridad de datos y reglas de desarrollo)*.
+- 📝 **Memoria Compartida y Reglas de Desarrollo:** [GEMINI.md](file:///root/lefri/GEMINI.md) *(fuente de verdad para IA, adaptadores de modelos y comandos de producción)*.
+- 🛠️ **Manual Operativo de Comandos:** [CLAUDE.md](file:///root/lefri/CLAUDE.md) *(comandos de compilación, linters y servicios PM2)*.
+- 📁 **Biblioteca Técnica Modular:** [docs/](file:///root/lefri/docs/) *(manuales especializados de auditoría, documentación técnica, guía de estilo y protocolo IAGS)*.
 
 ---
 
@@ -96,8 +112,8 @@ LeFri is engineered with a high-performance modular stack:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/jonnathanypg/LeFriApp.git
-   cd LeFriApp
+   git clone https://github.com/jonnathanypg/lefri.git
+   cd lefri
    ```
 
 2. **Install dependencies:**

@@ -125,7 +125,7 @@ export function LegalIntakeWizard({ onComplete, onCancel }: LegalIntakeWizardPro
 
       setAiDiagnosis(
         streamText.trim() ||
-        `Basado en los datos ingresados para la categoría **${category.toUpperCase()}**, tu caso presenta una viabilidad legal alta para iniciar una acción formal. Se recomienda conservar comprobantes y testigos del hecho.`
+        `Basado en los datos ingresados para la categoría **${category.toUpperCase()}**, se encontraron posibles aspectos jurídicos relevantes para iniciar una acción formal. Se recomienda conservar comprobantes y testigos del hecho.`
       );
 
       setStep(4);
@@ -387,7 +387,7 @@ export function LegalIntakeWizard({ onComplete, onCancel }: LegalIntakeWizardPro
             </div>
             <h3 className="text-lg font-semibold text-white">Analizando expediente con Gemini AI...</h3>
             <p className="text-xs text-slate-400 max-w-md mx-auto">
-              Buscando artículos constitucionales relevantes y calculando el nivel de viabilidad jurídica de tu caso.
+              Buscando artículos constitucionales relevantes y calculando aspectos jurídicos de tu caso.
             </p>
           </div>
         )}
@@ -397,11 +397,11 @@ export function LegalIntakeWizard({ onComplete, onCancel }: LegalIntakeWizardPro
           <div className="space-y-5">
             <div className="p-4 rounded-xl border border-indigo-500/30 bg-indigo-950/20 flex items-center justify-between">
               <div>
-                <span className="text-xs font-medium text-indigo-300">Viabilidad Jurídica Estimada</span>
+                <span className="text-xs font-medium text-indigo-300">Se encontraron posibles aspectos jurídicos</span>
                 <div className="text-2xl font-bold text-white mt-0.5">{viabilityScore}% / 100%</div>
               </div>
               <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 px-3 py-1">
-                Caso Alto Potencial
+                Se encontraron posibles aspectos jurídicos relevantes
               </Badge>
             </div>
 

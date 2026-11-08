@@ -63,13 +63,15 @@ export interface Translations {
   startNewProcess: string;
   continueProcess: string;
 
-  // Emergency
-  emergencyAlert: string;
-  emergencyDescription: string;
-  activateEmergency: string;
-  emergencyActivated: string;
-  location: string;
-  contacts: string;
+// Emergency
+    emergencyAlert: string;
+    emergencyDescription: string;
+    activateEmergency: string;
+    emergencyActivated: string;
+    location: string;
+    contacts: string;
+    comingSoon: string;
+    comingSoonDescription: string;
 
   // Profile
   personalInfo: string;
@@ -182,6 +184,8 @@ const translations: Record<string, any> = {
     emergencyActivated: "Emergencia Activada",
     location: "Ubicación",
     contacts: "Contactos",
+    comingSoon: "Próximamente",
+    comingSoonDescription: "Esta sección está en desarrollo. Nuevas funcionalidades de emergencia como alertas automáticas y geolocalización en tiempo real estarán disponibles pronto.",
 
     // Profile
     personalInfo: "Información Personal",
@@ -293,6 +297,8 @@ const translations: Record<string, any> = {
     emergencyActivated: "Emergency Activated",
     location: "Location",
     contacts: "Contacts",
+    comingSoon: "Coming Soon",
+    comingSoonDescription: "This section is under development. New emergency features like automatic alerts and real-time geolocation will be available soon.",
 
     // Profile
     personalInfo: "Personal Information",
@@ -397,13 +403,15 @@ const translations: Record<string, any> = {
     startNewProcess: "Iniciar Novo Processo",
     continueProcess: "Continuar Processo",
 
-    // Emergency
+// Emergency
     emergencyAlert: "Alerta de Emergência",
     emergencyDescription: "Ative um alerta de emergência que notificará seus contatos",
     activateEmergency: "Ativar Emergência",
     emergencyActivated: "Emergência Ativada",
     location: "Localização",
     contacts: "Contatos",
+    comingSoon: "Em Breve",
+    comingSoonDescription: "Esta seção está em desenvolvimento. Novas funcionalidades de emergência como alertas automáticos e geolocalização em tempo real estarão disponíveis em breve.",
 
     // Profile
     personalInfo: "Informações Pessoais",
@@ -495,6 +503,8 @@ const translations: Record<string, any> = {
     emergencyActivated: "Urgence Activée",
     location: "Emplacement",
     contacts: "Contacts",
+    comingSoon: "Prochainement",
+    comingSoonDescription: "Cette section est en développement. De nouvelles fonctionnalités d'urgence comme les alertes automatiques et la géolocalisation en temps réel seront disponibles prochainement.",
 
     // Profile
     personalInfo: "Informations Personnelles",

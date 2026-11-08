@@ -14,3 +14,17 @@ logs/
 *.log
 SKILL_Agentic-Engineering-Protocol_IAGS.md
 .htaccess
+
+# Media & Docs Archive exclusion
+*.mp4
+*.mp3
+*.wav
+*.ogg
+*.webm
+*.flac
+*.zip
+*.tar
+*.gz
+*.pdf
+docs_archive/
+NODE_ENV=development
